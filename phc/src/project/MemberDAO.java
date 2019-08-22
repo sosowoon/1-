@@ -9,12 +9,7 @@ import java.sql.*;
 public class MemberDAO {
 
 	public void insert(MemberDTO dto) throws Exception {
-
-		// 1.connector 설정
 		Class.forName("com.mysql.jdbc.Driver");
-
-		// 2.DB연결
-
 		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
 		String user = "root";
 		String password = "1234";
@@ -28,27 +23,19 @@ public class MemberDAO {
 
 		PreparedStatement ps = con.prepareStatement(sql);
 
-		ps.setString(1,dto.getId());
-		ps.setString(2,dto.getPassword());
-		ps.setString(3,dto.getName());
-		ps.setInt(4,dto.getHeight());
-		ps.setInt(5,dto.getAge());
-		ps.setString(6,String.valueOf(dto.getGender()));  // String 아닌 타입을 String 가지고 오고 싶으면 
-		//String.valueOf 
-	
-		ps.setInt(7,dto.getWeight());
-		ps.setInt(8,dto.getGcal());
-		ps.setInt(9,dto.getGdate());
-	
+		ps.setString(1, dto.getId());
+		ps.setString(2, dto.getPassword());
+		ps.setString(3, dto.getName());
+		ps.setInt(4, dto.getHeight());
+		ps.setInt(5, dto.getAge());
+		ps.setString(6, String.valueOf(dto.getGender()));
+
+		ps.setInt(7, dto.getWeight());
+		ps.setInt(8, dto.getGcal());
+		ps.setInt(9, dto.getGdate());
 
 
-		System.out.println("3, sql문 결정 성공..");
-
-		// 4. SQL문 전공 요청
 		ps.executeUpdate();
-		System.out.println("4. SQL문 전송 요청 성공");
-
-		System.out.println("4. sql 실행");
 
 
 		ps.close();
@@ -58,12 +45,8 @@ public class MemberDAO {
 
 	public ArrayList<MemberDTO> selectAll() throws Exception {
 		ArrayList<MemberDTO> list = new ArrayList<MemberDTO>();
-		// 1.드라이버 설정
 		Class.forName("com.mysql.jdbc.Driver");
 		System.out.println("1.드라이버 설정  ok...");
-
-		// 2.DB연결
-		// url. user. password
 
 		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
 		String user = "root";
@@ -71,7 +54,6 @@ public class MemberDAO {
 
 		Connection con = DriverManager.getConnection(url, user, password);
 		System.out.println("2. DB연결 성공 okayy... ");
-		// 3.SQL문 결정
 
 		String sql = "select * from member";
 		System.out.println("3. SQL 문 객체화 okay");
@@ -92,7 +74,6 @@ public class MemberDAO {
 			int gcal = rs.getInt(8);
 			int gdate = rs.getInt(9);
 
-			// '?' 쓰지 않는다. (?,?,?,?) 이렇게 쓴다.
 			System.out.println("4. SQL  실행요청  okay");
 		}
 
@@ -100,24 +81,17 @@ public class MemberDAO {
 		con.close();
 
 		return list;
-	} // selectall end
+	}
 
 	public boolean select(String id, String pwd) throws Exception {
 
-		// 1.드라이버 설정
 		Class.forName("com.mysql.jdbc.Driver");
-		System.out.println("1.드라이버 설정  ok...");
-
-		// 2.DB연결
-		// url. user. password
 
 		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
 		String user = "root";
 		String password = "1234";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		System.out.println("2. DB연결 성공 okayy... ");
-		// 3.SQL문 결정
 
 		String sql = "select * from member where id  = ? and pwd = ?"; // two question in same time
 		PreparedStatement ps = con.prepareStatement(sql);
@@ -125,11 +99,6 @@ public class MemberDAO {
 		ps.setString(1, id);
 		ps.setString(2, pwd);
 
-		// '?' 쓰지 않는다. (?,?,?,?) 이렇게 쓴다.
-
-		System.out.println("3. SQL 문 객체화 okay");
-
-		// 4.SQL문 실행 요청
 
 		ResultSet rs = ps.executeQuery();
 		System.out.println("4. SQL문 실행 요청 okay");
@@ -142,4 +111,37 @@ public class MemberDAO {
 		return false;// 묶어서 보냄
 	}
 
-}// class end
+	public MemberDTO selectKcal(String id) throws Exception {
+
+		Class.forName("com.mysql.jdbc.Driver");
+		System.out.println("1.드라이버 설정  ok...");
+
+		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
+		String user = "root";
+		String password = "1234";
+
+		Connection con = DriverManager.getConnection(url, user, password);
+
+		String sql = "select * from member where id  = ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+
+		ps.setString(1, id);
+
+		ResultSet rs = ps.executeQuery();
+		MemberDTO dto = new MemberDTO();
+		if (rs.next()) {
+			dto.setId(rs.getString(1));
+			dto.setPassword(rs.getString(2));
+			dto.setName(rs.getString(3));
+			dto.setHeight(rs.getInt(4));
+			dto.setWeight(rs.getInt(5));
+			dto.setAge(rs.getInt(6));
+			dto.setGender(rs.getString(7).charAt(0));
+			dto.setGcal(rs.getInt(8));
+			dto.setGdate(rs.getInt(9));
+			dto.setMain(rs.getInt(10));
+			dto.setLkcal(rs.getInt(11));
+		}
+		return dto;
+	}
+}

@@ -28,6 +28,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import javax.swing.UIManager;
 
 public class MyInfo implements ActionListener {
 	JDateChooser dateChooser;
@@ -87,18 +88,49 @@ public class MyInfo implements ActionListener {
 		});
 		b4.setBounds(354, 0, 118, 58);
 		f.getContentPane().add(b4);
-//수정
-		JLabel l1 = new JLabel("남은 칼로리");
+		JLabel l1 = new JLabel("목표 칼로리    " + "   섭취 칼로리   " + "      소모칼로리    " + "       남은칼로리   ");
+		l1.setBackground(Color.WHITE);
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
 		l1.setBounds(0, 58, 472, 48);
 		f.getContentPane().add(l1);
 
 		JLabel l2 = new JLabel();
+		l2.setBackground(Color.WHITE);
 		l2.setHorizontalAlignment(SwingConstants.CENTER);
 		l2.setBounds(0, 108, 472, 48);
 		f.getContentPane().add(l2);
-		
-		l2.setText("");
+		try {
+			MemberDAO memberdao = new MemberDAO();
+			MemberDTO memberdto = memberdao.selectKcal(Login.id);
+			int lKcal = memberdto.getLkcal();
+
+			int inKcal = 0;
+			MyDietDAO mydietdao = new MyDietDAO();
+			java.util.Date date = new java.util.Date();
+			Date sqldate = new Date(date.getTime());
+			System.out.println(sqldate);
+			ArrayList<MyDietDTO> mydietlist = mydietdao.select(1, sqldate, Login.id);
+			for (int i = 0; i < mydietlist.size(); i++) {
+				MyDietDTO dto1 = mydietlist.get(i);
+				DietDAO dao2 = new DietDAO();
+				DietDTO dto2 = dao2.select(dto1.getDid());
+				int cal = dto2.getDcal() * dto1.getAmount();
+				inKcal += cal;
+			}
+
+			int outKcal = 0;
+			MyExerDAO myexerdao =  new MyExerDAO();
+			listMyexer = myexerdao.selectAll(sqldate, Login.id);
+			for (int i = 0; i < listMyexer.size(); i++) {
+				MyExerDTO dto1 = listMyexer.get(i);
+				outKcal += dto1.getAmount();
+			} 
+			l2.setText(lKcal + "kcal       =        " + inKcal + "kcal        -        " + outKcal
+					+ "kcal        +      " + (lKcal-(inKcal-outKcal)) + "kcal");
+
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
@@ -165,7 +197,7 @@ public class MyInfo implements ActionListener {
 
 		JTextPane title1 = new JTextPane();
 		title1.setPreferredSize(new Dimension(472, 41));
-		title1.setBackground(Color.green);
+		title1.setBackground(new Color(0, 191, 255));
 		title1.setText("내 식단 리스트");
 		StyledDocument docT1 = title1.getStyledDocument();
 		docT1.setParagraphAttributes(0, 104, bSet, false);
@@ -173,7 +205,7 @@ public class MyInfo implements ActionListener {
 
 		JTextPane tM = new JTextPane();
 		tM.setPreferredSize(new Dimension(472, 41));
-		tM.setBackground(Color.PINK);
+		tM.setBackground(new Color(255, 250, 205));
 		tM.setText("아침");
 
 		StyledDocument doc1 = tM.getStyledDocument();
@@ -193,7 +225,7 @@ public class MyInfo implements ActionListener {
 
 		JTextPane tL = new JTextPane();
 		tL.setPreferredSize(new Dimension(472, 41));
-		tL.setBackground(Color.PINK);
+		tL.setBackground(new Color(245, 245, 220));
 		tL.setText("점심");
 		StyledDocument doc2 = tL.getStyledDocument();
 		doc2.setParagraphAttributes(0, 104, bSet, false);
@@ -211,7 +243,7 @@ public class MyInfo implements ActionListener {
 
 		JTextPane tD = new JTextPane();
 		tD.setPreferredSize(new Dimension(472, 41));
-		tD.setBackground(Color.PINK);
+		tD.setBackground(new Color(244, 164, 96));
 		tD.setText("저녁");
 		StyledDocument doc3 = tD.getStyledDocument();
 		doc3.setParagraphAttributes(0, 104, bSet, false);
@@ -229,7 +261,7 @@ public class MyInfo implements ActionListener {
 
 		JTextPane tS = new JTextPane();
 		tS.setPreferredSize(new Dimension(472, 41));
-		tS.setBackground(Color.PINK);
+		tS.setBackground(new Color(250, 128, 114));
 		tS.setText("간식");
 		StyledDocument doc4 = tS.getStyledDocument();
 		doc4.setParagraphAttributes(0, 104, bSet, false);
@@ -247,7 +279,7 @@ public class MyInfo implements ActionListener {
 
 		JTextPane title2 = new JTextPane();
 		title2.setPreferredSize(new Dimension(472, 41));
-		title2.setBackground(Color.green);
+		title2.setBackground(new Color(0, 191, 255));
 		title2.setText("내 운동 리스트");
 		StyledDocument docT2 = title2.getStyledDocument();
 		docT2.setParagraphAttributes(0, 104, bSet, false);
@@ -264,12 +296,12 @@ public class MyInfo implements ActionListener {
 			MyExerDTO dto1 = listMyexer.get(i);
 			ExerciseDAO dao2 = new ExerciseDAO();
 			ExerciseDTO dto2 = dao2.select(dto1.getEid());
-			label[i] = new JLabel("○ " + dto2.getEname() + ">>총칼:" + dto2.geteCal() + " >>양:" + dto1.getAmount());
+			label[i] = new JLabel("○ " + dto2.getEname() + "  >>총소모칼로리:" + dto1.getAmount());
 			label[i].setPreferredSize(new Dimension(360, 41));
 			rowPanel.add(label[i]);
 			if (dto1.isResult() == true) {
 				result = "Done";
-			}else if(dto1.isResult() == false) {
+			} else if (dto1.isResult() == false) {
 				result = "Notyet";
 			}
 			btn[i] = new JButton(result);
@@ -285,15 +317,15 @@ public class MyInfo implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		MyExerDAO dao = new MyExerDAO();
 		for (int i = 0; i < listMyexer.size(); i++) {
-			if(e.getSource() == btn[i]) {
-				if(btn[i].getText().equals("Done")){
+			if (e.getSource() == btn[i]) {
+				if (btn[i].getText().equals("Done")) {
 					btn[i].setText("Notyet");
 					try {
 						dao.update(listMyexer.get(i).getMyeid(), false);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
-				}else if(btn[i].getText().equals("Notyet")){
+				} else if (btn[i].getText().equals("Notyet")) {
 					btn[i].setText("Done");
 					try {
 						dao.update(listMyexer.get(i).getMyeid(), true);

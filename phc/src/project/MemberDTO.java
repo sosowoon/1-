@@ -11,8 +11,22 @@ public class MemberDTO {
 	char gender;
 	int gcal;
 	int gdate;
+	int main;
+	int lkcal;
 	
 	
+	public int getMain() {
+		return main;
+	}
+	public void setMain(int main) {
+		this.main = main;
+	}
+	public int getLkcal() {
+		return lkcal;
+	}
+	public void setLkcal(int lkcal) {
+		this.lkcal = lkcal;
+	}
 	public String getId() {
 		return id;
 	}
