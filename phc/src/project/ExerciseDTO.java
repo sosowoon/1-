@@ -3,7 +3,7 @@ package project;
 public class ExerciseDTO {
 	int eid;
 	String ename;
-	char kind;
+	String kind;
 	String contents;
 	String img;
 	int eCal;
@@ -19,10 +19,10 @@ public class ExerciseDTO {
 	public void setEname(String ename) {
 		this.ename = ename;
 	}
-	public char getKind() {
+	public String getKind() {
 		return kind;
 	}
-	public void setKind(char kind) {
+	public void setKind(String kind) {
 		this.kind = kind;
 	}
 	public String getContents() {

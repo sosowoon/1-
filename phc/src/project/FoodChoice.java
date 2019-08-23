@@ -13,6 +13,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -45,6 +46,16 @@ public class FoodChoice implements ActionListener{
 		f.getContentPane().add(b1);
 
 		JButton b2 = new JButton("식단");
+		b2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					new Food();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				f.setVisible(false);
+			}
+		});
 		b2.setBounds(118, 0, 118, 58);
 		f.getContentPane().add(b2);
 
@@ -59,6 +70,18 @@ public class FoodChoice implements ActionListener{
 		f.getContentPane().add(b3);
 
 		JButton b4 = new JButton("로그아웃");
+		b4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Login.saveId = null;
+					JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
+					new Login();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				f.setVisible(false);
+			}
+		});
 		b4.setBounds(354, 0, 118, 58);
 		f.getContentPane().add(b4);
 		/////////////////////////////////////////////////////////////
@@ -135,7 +158,7 @@ public class FoodChoice implements ActionListener{
 							dto1.setAmount(Integer.parseInt(innerT[i].getText()));
 							Date date = new Date();
 							dto1.setDate(new java.sql.Date(date.getTime()));
-							dto1.setId(Login.id);
+							dto1.setId(Login.saveId);
 							dto1.setDid(dto.getDid());
 							dto1.setTime(Food.time);
 							db.insert(dto1);

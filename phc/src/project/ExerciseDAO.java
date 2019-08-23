@@ -20,7 +20,7 @@ public class ExerciseDAO {
 		if(rs.next()) {
 			dto.setEid(rs.getInt(1));
 			dto.setEname(rs.getString(2));
-			dto.setKind(rs.getString(3).charAt(0));
+			dto.setKind(rs.getString(3));
 			dto.setContents(rs.getString(4));
 			dto.setImg(rs.getString(5));
 			dto.seteCal(rs.getInt(6));

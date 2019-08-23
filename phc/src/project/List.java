@@ -9,7 +9,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 
@@ -18,44 +19,52 @@ public class List {
 	public List() {
 		JFrame f = new JFrame();
 		f.setTitle("Personal Health Care");
-		f.setSize(530, 894);
+		f.setSize(489,800);
 		f.getContentPane().setLayout(null);
 
 		JButton b1 = new JButton("운동");
 		b1.setLocation(0, 0);
 		b1.setSize(118, 58);
-		
-
+		b1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new List();
+				f.setVisible(false);
+			}
+		});
 		f.getContentPane().add(b1);
 
 		JButton b2 = new JButton("식단");
-		b2.setBounds(118, 0, 118, 58);
-		f.getContentPane().add(b2);
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					new Food();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				f.setVisible(false);
 			}
 		});
+		b2.setBounds(118, 0, 118, 58);
+		f.getContentPane().add(b2);
 
 		JButton b3 = new JButton("내정보");
-		b3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new MyInfo();
-
-			}
-		});
 		b3.setBounds(236, 0, 118, 58);
 		f.getContentPane().add(b3);
 
 		JButton b4 = new JButton("로그아웃");
+		b4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Login.saveId = null;
+					JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
+					new Login();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				f.setVisible(false);
+			}
+		});
 		b4.setBounds(354, 0, 118, 58);
-		
 		f.getContentPane().add(b4);
 
 		JLabel lblNewLabel = new JLabel("유산소");
@@ -73,7 +82,7 @@ public class List {
 			}
 		});
 
-		t1.setBounds(0, 116, 472, 63);
+		t1.setBounds(0, 105, 472, 63);
 		ImageIcon icon = new ImageIcon("walking.png");
 		Image image = icon.getImage();
 		Image img = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -84,19 +93,19 @@ public class List {
 
 		JLabel label = new JLabel("무산소");
 		label.setFont(new Font("굴림", Font.PLAIN, 40));
-		label.setBounds(0, 439, 472, 38);
+		label.setBounds(0, 408, 472, 38);
 		f.getContentPane().add(label);
 
 		JButton t2 = new JButton("2. Running");
 		t2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Workoutlist you = new Workoutlist(22);
+				Workoutlist you = new Workoutlist(2);
 				f.setVisible(false);
 			}
 		});
 		t2.setFont(new Font("굴림", Font.PLAIN, 30));
-		t2.setBounds(0, 174, 472, 63);
+		t2.setBounds(0, 163, 472, 63);
 		f.getContentPane().add(t2);
 
 		ImageIcon icon3 = new ImageIcon("running.png");
@@ -114,7 +123,7 @@ public class List {
 			}
 		});
 		t3.setFont(new Font("굴림", Font.PLAIN, 30));
-		t3.setBounds(0, 235, 472, 63);
+		t3.setBounds(0, 224, 472, 63);
 		f.getContentPane().add(t3);
 
 		ImageIcon icon6 = new ImageIcon("soccer.png");
@@ -138,7 +147,7 @@ public class List {
 		t4.setIcon(icon9);
 
 		t4.setFont(new Font("굴림", Font.PLAIN, 30));
-		t4.setBounds(0, 294, 472, 63);
+		t4.setBounds(0, 283, 472, 63);
 		f.getContentPane().add(t4);
 
 		JButton t5 = new JButton("5. Swimming");
@@ -147,11 +156,10 @@ public class List {
 				Workoutlist you = new Workoutlist(5);
 			
 				f.setVisible(false);
-				
 			}
 		});
 		t5.setFont(new Font("굴림", Font.PLAIN, 30));
-		t5.setBounds(0, 355, 472, 63);
+		t5.setBounds(0, 344, 472, 63);
 		f.getContentPane().add(t5);
 
 		ImageIcon icon10 = new ImageIcon("swimming.png");
@@ -176,7 +184,7 @@ public class List {
 		t6.setIcon(icon13);
 
 		t6.setFont(new Font("굴림", Font.PLAIN, 30));
-		t6.setBounds(0, 487, 472, 63);
+		t6.setBounds(0, 449, 472, 63);
 		f.getContentPane().add(t6);
 
 		JButton t7 = new JButton("2. Squat");
@@ -195,7 +203,7 @@ public class List {
 		t7.setIcon(icon15);
 
 		t7.setFont(new Font("굴림", Font.PLAIN, 30));
-		t7.setBounds(0, 549, 472, 63);
+		t7.setBounds(0, 508, 472, 63);
 		f.getContentPane().add(t7);
 
 		JButton t8 = new JButton("3. Deadlift");
@@ -214,7 +222,7 @@ public class List {
 		t8.setIcon(icon17);
 
 		t8.setFont(new Font("굴림", Font.PLAIN, 30));
-		t8.setBounds(0, 609, 472, 63);
+		t8.setBounds(0, 568, 472, 63);
 		f.getContentPane().add(t8);
 
 		JButton t9 = new JButton("4. Push up");
@@ -232,7 +240,7 @@ public class List {
 		t9.setIcon(icon19);
 
 		t9.setFont(new Font("굴림", Font.PLAIN, 30));
-		t9.setBounds(0, 667, 472, 63);
+		t9.setBounds(0, 626, 472, 63);
 		f.getContentPane().add(t9);
 
 		JButton t10 = new JButton("5. Sit up");
@@ -252,7 +260,7 @@ public class List {
 		t10.setIcon(icon21);
 
 		t10.setFont(new Font("굴림", Font.PLAIN, 30));
-		t10.setBounds(0, 729, 472, 63);
+		t10.setBounds(0, 688, 472, 63);
 		f.getContentPane().add(t10);
 
 		f.setVisible(true);

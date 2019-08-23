@@ -3,6 +3,7 @@ package project;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -23,63 +24,78 @@ public class Workoutlist {
 	private JTextField t4;
 	private JTextField t5;
 
+	ExerciseDTO dto = null;
 	int eid;
-    
+	JFrame f;
 	public Workoutlist(int eid) {
 		this.eid = eid;
-	
-		
-		
-		
-		JFrame f = new JFrame();
+///////////////////////////////////////////////////공통시작!!
+/////////////////////////상단 메뉴/////////////////////////
+		f = new JFrame();
 		f.setTitle("Personal Health Care");
 		f.setSize(489, 800);
 		f.getContentPane().setLayout(null);
 
 		JButton b1 = new JButton("운동");
-		b1.setLocation(6, 6);
+		b1.setLocation(0, 0);
 		b1.setSize(118, 58);
-
+		b1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new List();
+				f.setVisible(false);
+			}
+		});
 		f.getContentPane().add(b1);
 
 		JButton b2 = new JButton("식단");
-		b2.setBounds(137, 6, 118, 58);
-		f.getContentPane().add(b2);
 		b2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					new Food();
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				f.setVisible(false);
 			}
 		});
+		b2.setBounds(118, 0, 118, 58);
+		f.getContentPane().add(b2);
 
 		JButton b3 = new JButton("내정보");
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new MyInfo();
+				f.setVisible(false);
 			}
 		});
-		b3.setBounds(257, 6, 118, 58);
+		b3.setBounds(236, 0, 118, 58);
 		f.getContentPane().add(b3);
 
 		JButton b4 = new JButton("로그아웃");
-		b4.setBounds(387, 6, 118, 58);
+		b4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Login.saveId = null;
+					JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
+					new Login();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				f.setVisible(false);
+			}
+		});
+		b4.setBounds(354, 0, 118, 58);
 		f.getContentPane().add(b4);
-
+/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////공통끝!!
 		ExerciseDAO dao = new ExerciseDAO();
-		ExerciseDTO dto = null;
 		try {
 			dto = dao.select(eid);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
 
-//		JLabel kind = new JLabel(dto.getKind());
-		JLabel kind = new JLabel();
+		JLabel kind = new JLabel(dto.getKind());
 		kind.setFont(new Font("굴림", Font.PLAIN, 30));
 		kind.setHorizontalAlignment(SwingConstants.CENTER);
 		kind.setBounds(16, 77, 472, 41);
@@ -90,24 +106,21 @@ public class Workoutlist {
 		summit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				new MyInfo();
+				MyInfo mainpage = new MyInfo();
 				f.setVisible(false);
 			}
 		});
-		summit.setBounds(6, 688, 170, 58);
+		summit.setBounds(44, 701, 170, 58);
 		f.getContentPane().add(summit);
 
-		System.out.println(dto.getImg() + "**********");
 		ImageIcon img = new ImageIcon(dto.getImg());
-		JLabel image = new JLabel("New label");
+		JLabel image = new JLabel("");
 		image.setIcon(img);
 		image.setBounds(6, 88, 472, 173);
 		f.getContentPane().add(image);
 
 		t1 = new JTextField(dto.getContents());
-		
-		
-		
+
 		t1.setHorizontalAlignment(SwingConstants.CENTER);
 		t1.setBounds(6, 277, 472, 119);
 		f.getContentPane().add(t1);
@@ -122,7 +135,7 @@ public class Workoutlist {
 			}
 		});
 		cancel.setFont(new Font("굴림", Font.PLAIN, 30));
-		cancel.setBounds(272, 688, 170, 58);
+		cancel.setBounds(272, 701, 170, 58);
 		f.getContentPane().add(cancel);
 
 		JLabel lblDistance = new JLabel("distance");
@@ -141,34 +154,68 @@ public class Workoutlist {
 		lblSpeed.setBounds(44, 544, 151, 41);
 		f.getContentPane().add(lblSpeed);
 
-		JLabel lblKacl = new JLabel("kacl");
+		JLabel lblKacl = new JLabel("kcal");
 		lblKacl.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		lblKacl.setBounds(44, 613, 151, 41);
+		lblKacl.setBounds(44, 650, 151, 41);
 		f.getContentPane().add(lblKacl);
 
 		t2 = new JTextField();
 		t2.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		t2.setBounds(257, 409, 185, 50);
+		t2.setBounds(232, 409, 210, 50);
 		f.getContentPane().add(t2);
 		t2.setColumns(10);
 
 		t3 = new JTextField();
 		t3.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
 		t3.setColumns(10);
-		t3.setBounds(257, 474, 185, 50);
+		t3.setBounds(232, 474, 210, 50);
 		f.getContentPane().add(t3);
 
 		t4 = new JTextField();
 		t4.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
 		t4.setColumns(10);
-		t4.setBounds(257, 539, 185, 50);
+		t4.setBounds(232, 539, 210, 50);
 		f.getContentPane().add(t4);
 
 		t5 = new JTextField();
 		t5.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
 		t5.setColumns(10);
-		t5.setBounds(257, 608, 185, 50);
+		t5.setBounds(137, 645, 305, 41);
 		f.getContentPane().add(t5);
+
+		JButton answer = new JButton("선택");
+		answer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				int mul1 = Integer.parseInt(t2.getText());
+				int mul2 = Integer.parseInt(t3.getText());
+				int mul3 = Integer.parseInt(t4.getText());
+
+				double sum = mul1 * 0.1 + mul2 * 0.6 + mul3 * 0.1;
+				// double --> String
+				int cal = dto.geteCal();
+				int amount = (int) (sum * cal);
+				t5.setText(String.valueOf(amount)); // double --> string 으로 변환시키는 코드
+				try {
+					MyExerDAO dao2 = new MyExerDAO();
+					MyExerDTO dto = new MyExerDTO();
+					dto.setAmount(amount); // amount
+
+					dto.setId(Login.saveId); // test
+					dto.setEid(eid); // eid
+					Date date = new Date(); // date
+					dto.setDate(new java.sql.Date(date.getTime()));
+
+					dao2.insert(dto);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		});
+		answer.setFont(new Font("Dialog", Font.PLAIN, 30));
+		answer.setBounds(44, 597, 398, 41);
+		f.getContentPane().add(answer);
 
 		f.setVisible(true);
 	}

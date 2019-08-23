@@ -15,9 +15,7 @@ public class MemberDAO {
 		String password = "1234";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		System.out.println("2. DB연결 성공 okayy... ");
 
-		System.out.println("3. SQL 문 객체화 okay");
 
 		String sql = "insert into member (id,pwd,name,height,age,gender,weight,gcal,gdate) values(?,?,?,?,?,?,?,?,?)";
 
@@ -46,14 +44,12 @@ public class MemberDAO {
 	public ArrayList<MemberDTO> selectAll() throws Exception {
 		ArrayList<MemberDTO> list = new ArrayList<MemberDTO>();
 		Class.forName("com.mysql.jdbc.Driver");
-		System.out.println("1.드라이버 설정  ok...");
 
 		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
 		String user = "root";
 		String password = "1234";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		System.out.println("2. DB연결 성공 okayy... ");
 
 		String sql = "select * from member";
 		System.out.println("3. SQL 문 객체화 okay");
@@ -74,7 +70,6 @@ public class MemberDAO {
 			int gcal = rs.getInt(8);
 			int gdate = rs.getInt(9);
 
-			System.out.println("4. SQL  실행요청  okay");
 		}
 
 		ps.close();
@@ -101,7 +96,6 @@ public class MemberDAO {
 
 
 		ResultSet rs = ps.executeQuery();
-		System.out.println("4. SQL문 실행 요청 okay");
 		MemberDTO dto = new MemberDTO();
 
 		if (rs.next()) {
@@ -110,11 +104,33 @@ public class MemberDAO {
 		}
 		return false;// 묶어서 보냄
 	}
+	public boolean selectId(String id) throws Exception {
+
+		Class.forName("com.mysql.jdbc.Driver");
+
+		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
+		String user = "root";
+		String password = "1234";
+
+		Connection con = DriverManager.getConnection(url, user, password);
+
+		String sql = "select * from member where id  = ?"; // two question in same time
+		PreparedStatement ps = con.prepareStatement(sql);
+
+		ps.setString(1, id);
+
+		ResultSet rs = ps.executeQuery();
+
+		if (rs.next()) {
+			return true;
+		}else {
+			return false;
+		}
+	}
 
 	public MemberDTO selectKcal(String id) throws Exception {
 
 		Class.forName("com.mysql.jdbc.Driver");
-		System.out.println("1.드라이버 설정  ok...");
 
 		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
 		String user = "root";

@@ -8,6 +8,7 @@ import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
@@ -43,11 +44,11 @@ public class Food implements ActionListener{
 			}
 		});
 		f.getContentPane().add(b1);
-		
+
 		JButton b2 = new JButton("식단");
 		b2.setBounds(118, 0, 118, 58);
 		f.getContentPane().add(b2);
-		
+
 		JButton b3 = new JButton("내정보");
 		b3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -57,8 +58,20 @@ public class Food implements ActionListener{
 		});
 		b3.setBounds(236, 0, 118, 58);
 		f.getContentPane().add(b3);
-		
+
 		JButton b4 = new JButton("로그아웃");
+		b4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Login.saveId = null;
+					JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
+					new Login();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				f.setVisible(false);
+			}
+		});
 		b4.setBounds(354, 0, 118, 58);
 		f.getContentPane().add(b4);
 		/////////////////////////////////////////////////////////////
@@ -100,7 +113,7 @@ public class Food implements ActionListener{
 		columnpanel.add(tM);
 		MyDietDAO dao = new MyDietDAO();
 		Date date = new Date();
-		ArrayList<MyDietDTO> listM = dao.select(0, new java.sql.Date(date.getTime()),Login.id);
+		ArrayList<MyDietDTO> listM = dao.select(0, new java.sql.Date(date.getTime()),Login.saveId);
 		for (int i = 0; i < listM.size(); i++) {
 			MyDietDTO dto1 = listM.get(i);
 			DietDAO dao2 = new DietDAO();
@@ -123,7 +136,7 @@ public class Food implements ActionListener{
 		StyledDocument doc2 = tL.getStyledDocument();
 		doc2.setParagraphAttributes(0, 104, bSet, false);
 		columnpanel.add(tL);
-		ArrayList<MyDietDTO> listL = dao.select(1, new java.sql.Date(date.getTime()),Login.id);
+		ArrayList<MyDietDTO> listL = dao.select(1, new java.sql.Date(date.getTime()),Login.saveId);
 		for (int i = 0; i < listL.size(); i++) {
 			MyDietDTO dto1 = listL.get(i);
 			DietDAO dao2 = new DietDAO();
@@ -145,7 +158,7 @@ public class Food implements ActionListener{
 		StyledDocument doc3 = tD.getStyledDocument();
 		doc3.setParagraphAttributes(0, 104, bSet, false);
 		columnpanel.add(tD);
-		ArrayList<MyDietDTO> listD = dao.select(2, new java.sql.Date(date.getTime()),Login.id);
+		ArrayList<MyDietDTO> listD = dao.select(2, new java.sql.Date(date.getTime()),Login.saveId);
 		for (int i = 0; i < listD.size(); i++) {
 			MyDietDTO dto1 = listD.get(i);
 			DietDAO dao2 = new DietDAO();
@@ -167,7 +180,7 @@ public class Food implements ActionListener{
 		StyledDocument doc4 = tS.getStyledDocument();
 		doc4.setParagraphAttributes(0, 104, bSet, false);
 		columnpanel.add(tS);
-		ArrayList<MyDietDTO> listS = dao.select(3, new java.sql.Date(date.getTime()),Login.id);
+		ArrayList<MyDietDTO> listS = dao.select(3, new java.sql.Date(date.getTime()),Login.saveId);
 		for (int i = 0; i < listS.size(); i++) {
 			MyDietDTO dto1 = listS.get(i);
 			DietDAO dao2 = new DietDAO();

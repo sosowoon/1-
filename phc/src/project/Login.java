@@ -3,19 +3,22 @@ package project;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 
 public class Login {
 	private JTextField ID1;
-	private JTextField ID2;
-	static String id = "test";
-
+//	static String id = "root"; //exmple
+	static String saveId;
+	JPasswordField ID2;
 	public Login() {
+//		id = "admin"; // exmaple
 
 		JFrame f1 = new JFrame();
 		f1.setSize(489, 800);
@@ -31,12 +34,12 @@ public class Login {
 		s1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				new Signin2();
+				Signin2 page11 = new Signin2();
 				f1.setVisible(false);
 			}
 		});
 		s1.setFont(new Font("굴림", Font.PLAIN, 35));
-		s1.setBounds(28, 473, 157, 86);
+		s1.setBounds(29, 294, 182, 67);
 		f1.getContentPane().add(s1);
 
 		JButton s2 = new JButton("Log in ");
@@ -44,13 +47,14 @@ public class Login {
 			public void actionPerformed(ActionEvent e) {
 				
 				String id = ID1.getText();
+				saveId = id;
+				System.out.println("////" + saveId);
 				String pwd = ID2.getText();
 				MemberDAO dao = new MemberDAO();
 				try {
 					boolean result = dao.select(id, pwd);
 					if (result == true) {
 						JOptionPane.showMessageDialog(null, "환영합니다.");
-
 						new MyInfo();
 
 						f1.setVisible(false);
@@ -67,7 +71,7 @@ public class Login {
 		});
 		s2.setFont(new Font("굴림", Font.PLAIN, 35));
 		s2.setSize(489, 800);
-		s2.setBounds(267, 473, 176, 86);
+		s2.setBounds(238, 294, 204, 67);
 		f1.getContentPane().add(s2);
 
 		JLabel IDtext = new JLabel("ID ");
@@ -90,12 +94,10 @@ public class Login {
 		f1.getContentPane().add(ID1);
 		ID1.setColumns(10);
 
-		ID2 = new JTextField();
-		ID2.setSize(489, 800);
-		ID2.setBounds(0, 178, 473, 67);
+		ID2 = new JPasswordField();
+		ID2.setBounds(0, 192, 471, 59);
 		f1.getContentPane().add(ID2);
-		ID2.setColumns(10);
-
+		
 		f1.setVisible(true);
 
 	}

@@ -6,6 +6,8 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.Font;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,10 +26,6 @@ public class Signin2 {
 	private JTextField t8;
 	private JTextField t9;
 	private JPasswordField t3;
-
-	public static void main(String[] args) {
-		new Signin2();
-	}
 
 	public Signin2() {
 
@@ -82,48 +80,50 @@ public class Signin2 {
 		lblNewLabel_8.setFont(new Font("Dialog", Font.PLAIN, 30));
 		lblNewLabel_8.setBounds(2, 596, 179, 54);
 		p1.getContentPane().add(lblNewLabel_8);
-		
+
 		JButton b1 = new JButton("회원가입");
 		b1.setFont(new Font("굴림", Font.PLAIN, 35));
 		b1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				String id = t1.getText();
-				String pwd = t2.getText();
-				String name = t3.getText();
-				int height = Integer.parseInt(t4.getText());
-				int age = Integer.parseInt (t5.getText());
-				char gender = t6.getText().charAt(0);
-				int weight = Integer.parseInt (t7.getText());
-				int gcal =Integer.parseInt( t8.getText());
-				int gdate = Integer.parseInt(t9.getText());
-			
-			
-				
-				MemberDTO dto = new MemberDTO();
-				dto.setId(id);
-				dto.setName(name);
-				dto.setPassword(pwd);
-				dto.setHeight(height); // 2가지 케이스 string 을 쳐서 하나를타입하던지, ()안에 넣어서 처리한
-				dto.setGender(gender);
-				dto.setAge(age);
-				dto.setWeight(weight);
-				dto.setGcal(gcal);
-				dto.setGdate(gdate);
-		
-				//db process
+				String sign = t1.getText();
 				MemberDAO dao = new MemberDAO();
-				
 				try {
-					dao.insert(dto);
+					boolean result = dao.selectId(sign);
+					if (result == false) {
+						JOptionPane.showMessageDialog(null, "가입을 축하드립니다.");
+						
+						String id = t1.getText();
+						String pwd = t2.getText();
+						String name = t3.getText();
+						int height = Integer.parseInt(t4.getText());
+						int age = Integer.parseInt(t5.getText());
+						char gender = t6.getText().charAt(0);
+						int weight = Integer.parseInt(t7.getText());
+						int gcal = Integer.parseInt(t8.getText());
+						int gdate = Integer.parseInt(t9.getText());
+						
+						MemberDTO dto = new MemberDTO();
+						dto.setId(id);
+						dto.setName(name);
+						dto.setPassword(pwd);
+						dto.setHeight(height); // 2가지 케이스 string 을 쳐서 하나를타입하던지, ()안에 넣어서 처리한
+						dto.setGender(gender);
+						dto.setAge(age);
+						dto.setWeight(weight);
+						dto.setGcal(gcal);
+						dto.setGdate(gdate);
+						
+						dao.insert(dto);
+						p1.setVisible(false);
+						new List();
+						Login.saveId = t1.getText();
+						
+					} else {
+						JOptionPane.showMessageDialog(null, "아이디가 사용중입니다");
+					}
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				List me = new List();
-				p1.setVisible(false);
-
 			}
 		});
 		b1.setBounds(83, 662, 285, 49);
@@ -170,11 +170,11 @@ public class Signin2 {
 		t9.setColumns(30);
 		t9.setBounds(193, 596, 277, 55);
 		p1.getContentPane().add(t9);
-		
+
 		t3 = new JPasswordField();
 		t3.setBounds(128, 158, 342, 49);
 		p1.getContentPane().add(t3);
-		
+
 		JLabel lblQl = new JLabel("비밀번호");
 		lblQl.setFont(new Font("Dialog", Font.PLAIN, 30));
 		lblQl.setBounds(0, 157, 116, 50);

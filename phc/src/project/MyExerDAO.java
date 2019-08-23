@@ -55,43 +55,23 @@ public class MyExerDAO {
 		con.close();
 	}
 	public void insert(MyExerDTO dto) throws Exception {
-
-		// 1.connector 설정
 		Class.forName("com.mysql.jdbc.Driver");
-
-		// 2.DB연결
-
-		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
+		String url = "jdbc:mysql://localhost:3306/phc";
 		String user = "root";
 		String password = "1234";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		System.out.println("2. DB연결 성공 okayy... ");
-
-		System.out.println("3. SQL 문 객체화 okay");
-
-		String sql = "select e, contents ,eCal from member where eid  = ? ";
-
-		PreparedStatement ps = con.prepareStatement(sql);
-
-		ps.setString(1,dto.getId());
-//		ps.setString(2,dto.getPassword());
-		
+		String sql = "insert into MyExer(id,date,amount,eid) values(?,?,?,?)";
 	
-
-
-		System.out.println("3, sql문 결정 성공..");
-
-		// 4. SQL문 전공 요청
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setString(1, dto.getId()); //test1
+		ps.setDate(2, dto.getDate());
+		ps.setInt(3, dto.getAmount());
+		ps.setInt(4, dto.getEid());//1
+		
 		ps.executeUpdate();
-		System.out.println("4. SQL문 전송 요청 성공");
-
-		System.out.println("4. sql 실행");
-
-
 		ps.close();
 		con.close();
-
 	}
 
 	
@@ -100,7 +80,6 @@ public class MyExerDAO {
 
 		// 1.드라이버 설정
 		Class.forName("com.mysql.jdbc.Driver");
-		System.out.println("1.드라이버 설정  ok...");
 
 		// 2.DB연결
 		// url. user. password
@@ -110,7 +89,6 @@ public class MyExerDAO {
 		String password = "root";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		System.out.println("2. DB연결 성공 okayy... ");
 		// 3.SQL문 결정
 
 		String sql = "select * from MyExer where id  = ? and pwd = ?"; // two question in same time
@@ -121,12 +99,10 @@ public class MyExerDAO {
 
 		// '?' 쓰지 않는다. (?,?,?,?) 이렇게 쓴다.
 
-		System.out.println("3. SQL 문 객체화 okay");
 
 		// 4.SQL문 실행 요청
 
 		ResultSet rs = ps.executeQuery();
-		System.out.println("4. SQL문 실행 요청 okay");
 		MemberDTO dto = new MemberDTO();
 
 		if (rs.next()) {

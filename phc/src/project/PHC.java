@@ -29,10 +29,13 @@ public class PHC {
 		Image img = image2age.getScaledInstance(500, 500, Image.SCALE_SMOOTH);
 		ImageIcon icon2 = new ImageIcon(img);
 		me.setIcon(icon2);
+
 		me.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				new Login();
+
+				Login me = new Login();
 				F.setVisible(false);
+
 			}
 		});
 
@@ -48,3 +51,16 @@ public class PHC {
 	}
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

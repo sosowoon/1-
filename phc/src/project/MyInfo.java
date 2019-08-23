@@ -3,6 +3,7 @@ package project;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -75,10 +76,11 @@ public class MyInfo implements ActionListener {
 		f.getContentPane().add(b3);
 
 		JButton b4 = new JButton("로그아웃");
-		b2.addActionListener(new ActionListener() {
+		b4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Login.id = null;
+					Login.saveId = null;
+					JOptionPane.showMessageDialog(f, "로그아웃되었습니다.");
 					new Login();
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -88,6 +90,7 @@ public class MyInfo implements ActionListener {
 		});
 		b4.setBounds(354, 0, 118, 58);
 		f.getContentPane().add(b4);
+		
 		JLabel l1 = new JLabel("목표 칼로리    " + "   섭취 칼로리   " + "      소모칼로리    " + "       남은칼로리   ");
 		l1.setBackground(Color.WHITE);
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
@@ -101,7 +104,7 @@ public class MyInfo implements ActionListener {
 		f.getContentPane().add(l2);
 		try {
 			MemberDAO memberdao = new MemberDAO();
-			MemberDTO memberdto = memberdao.selectKcal(Login.id);
+			MemberDTO memberdto = memberdao.selectKcal(Login.saveId);
 			int lKcal = memberdto.getLkcal();
 
 			int inKcal = 0;
@@ -109,7 +112,7 @@ public class MyInfo implements ActionListener {
 			java.util.Date date = new java.util.Date();
 			Date sqldate = new Date(date.getTime());
 			System.out.println(sqldate);
-			ArrayList<MyDietDTO> mydietlist = mydietdao.select(1, sqldate, Login.id);
+			ArrayList<MyDietDTO> mydietlist = mydietdao.select(1, sqldate, Login.saveId);
 			for (int i = 0; i < mydietlist.size(); i++) {
 				MyDietDTO dto1 = mydietlist.get(i);
 				DietDAO dao2 = new DietDAO();
@@ -120,7 +123,7 @@ public class MyInfo implements ActionListener {
 
 			int outKcal = 0;
 			MyExerDAO myexerdao =  new MyExerDAO();
-			listMyexer = myexerdao.selectAll(sqldate, Login.id);
+			listMyexer = myexerdao.selectAll(sqldate, Login.saveId);
 			for (int i = 0; i < listMyexer.size(); i++) {
 				MyExerDTO dto1 = listMyexer.get(i);
 				outKcal += dto1.getAmount();
@@ -212,7 +215,7 @@ public class MyInfo implements ActionListener {
 		doc1.setParagraphAttributes(0, 104, bSet, false);
 		columnpanel.add(tM);
 		MyDietDAO dao = new MyDietDAO();
-		ArrayList<MyDietDTO> listM = dao.select(0, date, Login.id);
+		ArrayList<MyDietDTO> listM = dao.select(0, date, Login.saveId);
 		for (int i = 0; i < listM.size(); i++) {
 			MyDietDTO dto1 = listM.get(i);
 			DietDAO dao2 = new DietDAO();
@@ -230,7 +233,7 @@ public class MyInfo implements ActionListener {
 		StyledDocument doc2 = tL.getStyledDocument();
 		doc2.setParagraphAttributes(0, 104, bSet, false);
 		columnpanel.add(tL);
-		ArrayList<MyDietDTO> listL = dao.select(1, date, Login.id);
+		ArrayList<MyDietDTO> listL = dao.select(1, date, Login.saveId);
 		for (int i = 0; i < listL.size(); i++) {
 			MyDietDTO dto1 = listL.get(i);
 			DietDAO dao2 = new DietDAO();
@@ -248,7 +251,7 @@ public class MyInfo implements ActionListener {
 		StyledDocument doc3 = tD.getStyledDocument();
 		doc3.setParagraphAttributes(0, 104, bSet, false);
 		columnpanel.add(tD);
-		ArrayList<MyDietDTO> listD = dao.select(2, date, Login.id);
+		ArrayList<MyDietDTO> listD = dao.select(2, date, Login.saveId);
 		for (int i = 0; i < listD.size(); i++) {
 			MyDietDTO dto1 = listD.get(i);
 			DietDAO dao2 = new DietDAO();
@@ -266,7 +269,7 @@ public class MyInfo implements ActionListener {
 		StyledDocument doc4 = tS.getStyledDocument();
 		doc4.setParagraphAttributes(0, 104, bSet, false);
 		columnpanel.add(tS);
-		ArrayList<MyDietDTO> listS = dao.select(3, date, Login.id);
+		ArrayList<MyDietDTO> listS = dao.select(3, date, Login.saveId);
 		for (int i = 0; i < listS.size(); i++) {
 			MyDietDTO dto1 = listS.get(i);
 			DietDAO dao2 = new DietDAO();
@@ -286,7 +289,7 @@ public class MyInfo implements ActionListener {
 		columnpanel.add(title2);
 
 		MyExerDAO dao3 = new MyExerDAO();
-		listMyexer = dao3.selectAll(date, Login.id);
+		listMyexer = dao3.selectAll(date, Login.saveId);
 
 		JLabel[] label = new JLabel[listMyexer.size()];
 		btn = new JButton[listMyexer.size()];
