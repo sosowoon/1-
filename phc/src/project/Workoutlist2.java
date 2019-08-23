@@ -4,6 +4,7 @@ import java.awt.Font;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Date;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ public class Workoutlist2 {
 	int eid;
 	private JTextField a2;
 	JFrame f;
+
 	public Workoutlist2(int eid) {
 		this.eid = eid;
 
@@ -96,25 +98,12 @@ public class Workoutlist2 {
 		a1.setBounds(0, 65, 472, 53);
 		f.getContentPane().add(a1);
 
-		JButton btnNewButton = new JButton("선택완료");
-		btnNewButton.setFont(new Font("굴림", Font.PLAIN, 30));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				MyInfo main = new MyInfo();
-				f.setVisible(false);
-			}
-		});
-		btnNewButton.setBounds(36, 652, 170, 58);
-		f.getContentPane().add(btnNewButton);
-
 		JTextField a4 = new JTextField();
 		a4.setFont(new Font("굴림", Font.PLAIN, 30));
 		a4.setColumns(10);
 		a4.setBounds(196, 474, 276, 53);
 		f.getContentPane().add(a4);
 
-		System.out.println(dto.getImg() + "**********");
 		ImageIcon img = new ImageIcon(dto.getImg());
 		JLabel walkingimage = new JLabel("");
 		walkingimage.setIcon(img);
@@ -152,6 +141,42 @@ public class Workoutlist2 {
 		button.setFont(new Font("굴림", Font.PLAIN, 30));
 		button.setBounds(262, 652, 170, 58);
 		f.getContentPane().add(button);
+
+		JButton btnNewButton = new JButton("선택완료");
+		btnNewButton.setFont(new Font("굴림", Font.PLAIN, 30));
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				int mul1 = Integer.parseInt(a3.getText());
+				int mul2 = Integer.parseInt(a4.getText());
+				int mul3 = Integer.parseInt(a5.getText());
+
+				double sum = mul1 * 0.1 + mul2 * 0.6 + mul3 * 0.1;
+				// double --> String
+				int cal = dto.geteCal();
+				int amount = (int) (sum * cal);
+				a5.setText(String.valueOf(amount)); // double --> string 으로 변환시키는 코드
+				try {
+					MyExerDAO dao2 = new MyExerDAO();
+					MyExerDTO dto = new MyExerDTO();
+					dto.setAmount(amount); // amount
+					System.out.println("////////" + Login.saveId);
+
+					dto.setId(Login.saveId); // test
+					dto.setEid(eid); // eid
+					Date date = new Date(); // date
+					dto.setDate(new java.sql.Date(date.getTime()));
+
+					dao2.insert(dto);
+					MyInfo main = new MyInfo();
+					f.setVisible(false);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		btnNewButton.setBounds(36, 652, 170, 58);
+		f.getContentPane().add(btnNewButton);
 
 		JLabel lblNewLabel_1 = new JLabel("reps");
 		lblNewLabel_1.setFont(new Font("Lucida Grande", Font.PLAIN, 34));

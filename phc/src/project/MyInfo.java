@@ -39,7 +39,8 @@ public class MyInfo implements ActionListener {
 	String result;
 	ArrayList<MyExerDTO> listMyexer;
 	JButton[] btn;
-
+	JLabel l2;
+	
 	public MyInfo() {
 		f = new JFrame();
 		f.setTitle("Personal Health Care");
@@ -97,43 +98,12 @@ public class MyInfo implements ActionListener {
 		l1.setBounds(0, 58, 472, 48);
 		f.getContentPane().add(l1);
 
-		JLabel l2 = new JLabel();
+		l2 = new JLabel();
 		l2.setBackground(Color.WHITE);
 		l2.setHorizontalAlignment(SwingConstants.CENTER);
 		l2.setBounds(0, 108, 472, 48);
 		f.getContentPane().add(l2);
-		try {
-			MemberDAO memberdao = new MemberDAO();
-			MemberDTO memberdto = memberdao.selectKcal(Login.saveId);
-			int lKcal = memberdto.getLkcal();
-
-			int inKcal = 0;
-			MyDietDAO mydietdao = new MyDietDAO();
-			java.util.Date date = new java.util.Date();
-			Date sqldate = new Date(date.getTime());
-			System.out.println(sqldate);
-			ArrayList<MyDietDTO> mydietlist = mydietdao.select(1, sqldate, Login.saveId);
-			for (int i = 0; i < mydietlist.size(); i++) {
-				MyDietDTO dto1 = mydietlist.get(i);
-				DietDAO dao2 = new DietDAO();
-				DietDTO dto2 = dao2.select(dto1.getDid());
-				int cal = dto2.getDcal() * dto1.getAmount();
-				inKcal += cal;
-			}
-
-			int outKcal = 0;
-			MyExerDAO myexerdao =  new MyExerDAO();
-			listMyexer = myexerdao.selectAll(sqldate, Login.saveId);
-			for (int i = 0; i < listMyexer.size(); i++) {
-				MyExerDTO dto1 = listMyexer.get(i);
-				outKcal += dto1.getAmount();
-			} 
-			l2.setText(lKcal + "kcal       =        " + inKcal + "kcal        -        " + outKcal
-					+ "kcal        +      " + (lKcal-(inKcal-outKcal)) + "kcal");
-
-		} catch (Exception e2) {
-			e2.printStackTrace();
-		}
+		recountKcal();
 
 		JPanel panel = new JPanel();
 		panel.setLayout(new FlowLayout());
@@ -225,7 +195,7 @@ public class MyInfo implements ActionListener {
 			label.setPreferredSize(new Dimension(472, 41));
 			columnpanel.add(label);
 		}
-
+		
 		JTextPane tL = new JTextPane();
 		tL.setPreferredSize(new Dimension(472, 41));
 		tL.setBackground(new Color(245, 245, 220));
@@ -325,6 +295,7 @@ public class MyInfo implements ActionListener {
 					btn[i].setText("Notyet");
 					try {
 						dao.update(listMyexer.get(i).getMyeid(), false);
+						recountKcal();
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -332,11 +303,45 @@ public class MyInfo implements ActionListener {
 					btn[i].setText("Done");
 					try {
 						dao.update(listMyexer.get(i).getMyeid(), true);
+						recountKcal();
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
 				}
 			}
+		}
+	}
+	public void recountKcal() {
+		try {
+			MemberDAO memberdao = new MemberDAO();
+			MemberDTO memberdto = memberdao.selectKcal(Login.saveId);
+			int lKcal = memberdto.getLkcal();
+
+			int inKcal = 0;
+			MyDietDAO mydietdao = new MyDietDAO();
+			java.util.Date date = new java.util.Date();
+			Date sqldate = new Date(date.getTime());
+			ArrayList<MyDietDTO> mydietlist = mydietdao.selectTcal(sqldate, Login.saveId);
+			for (int i = 0; i < mydietlist.size(); i++) {
+				MyDietDTO dto1 = mydietlist.get(i);
+				DietDAO dao2 = new DietDAO();
+				DietDTO dto2 = dao2.select(dto1.getDid());
+				int cal = dto2.getDcal() * dto1.getAmount();
+				inKcal += cal;
+			}
+
+			int outKcal = 0;
+			MyExerDAO myexerdao =  new MyExerDAO();
+			ArrayList<MyExerDTO> list = myexerdao.select(sqldate, Login.saveId , true);
+			for (int i = 0; i < list.size(); i++) {
+				MyExerDTO dto1 = list.get(i);
+				outKcal += dto1.getAmount();
+			} 
+			l2.setText(lKcal + "kcal       =        " + inKcal + "kcal        -        " + outKcal
+					+ "kcal        +      " + (lKcal-(inKcal-outKcal)) + "kcal");
+			f.setVisible(true);
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 }

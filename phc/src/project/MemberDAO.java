@@ -1,9 +1,6 @@
 package project;
 
-import java.util.ArrayList;
-
 import project.MemberDTO;
-
 import java.sql.*;
 
 public class MemberDAO {
@@ -41,42 +38,41 @@ public class MemberDAO {
 
 	}
 
-	public ArrayList<MemberDTO> selectAll() throws Exception {
-		ArrayList<MemberDTO> list = new ArrayList<MemberDTO>();
-		Class.forName("com.mysql.jdbc.Driver");
-
-		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
-		String user = "root";
-		String password = "1234";
-
-		Connection con = DriverManager.getConnection(url, user, password);
-
-		String sql = "select * from member";
-		System.out.println("3. SQL 문 객체화 okay");
-
-		PreparedStatement ps = con.prepareStatement(sql);
-
-		ResultSet rs = ps.executeQuery();
-
-		while (rs.next()) {
-
-			String id = rs.getString(1);
-			String name = rs.getString(2);
-			String pwd = rs.getString(3);
-			int height = rs.getInt(4);
-			int age = rs.getInt(5);
+//	public ArrayList<MemberDTO> selectAll() throws Exception {
+//		ArrayList<MemberDTO> list = new ArrayList<MemberDTO>();
+//		Class.forName("com.mysql.jdbc.Driver");
+//
+//		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
+//		String user = "root";
+//		String password = "1234";
+//
+//		Connection con = DriverManager.getConnection(url, user, password);
+//
+//		String sql = "select * from member";
+//
+//		PreparedStatement ps = con.prepareStatement(sql);
+//
+//		ResultSet rs = ps.executeQuery();
+//
+//		while (rs.next()) {
+//
+//			String id = rs.getString(1);
+//			String name = rs.getString(2);
+//			String pwd = rs.getString(3);
+//			int height = rs.getInt(4);
+//			int age = rs.getInt(5);
 //			Character gender = rs.getChar(6);
-			int weight = rs.getInt(7);
-			int gcal = rs.getInt(8);
-			int gdate = rs.getInt(9);
-
-		}
-
-		ps.close();
-		con.close();
-
-		return list;
-	}
+//			int weight = rs.getInt(7);
+//			int gcal = rs.getInt(8);
+//			int gdate = rs.getInt(9);
+//
+//		}
+//
+//		ps.close();
+//		con.close();
+//
+//		return list;
+//	}
 
 	public boolean select(String id, String pwd) throws Exception {
 
@@ -96,13 +92,14 @@ public class MemberDAO {
 
 
 		ResultSet rs = ps.executeQuery();
-		MemberDTO dto = new MemberDTO();
 
 		if (rs.next()) {
 			return true;
-
 		}
+		ps.close();
+		con.close();
 		return false;// 묶어서 보냄
+		
 	}
 	public boolean selectId(String id) throws Exception {
 
@@ -120,7 +117,8 @@ public class MemberDAO {
 		ps.setString(1, id);
 
 		ResultSet rs = ps.executeQuery();
-
+		ps.close();
+		con.close();
 		if (rs.next()) {
 			return true;
 		}else {
@@ -158,6 +156,8 @@ public class MemberDAO {
 			dto.setMain(rs.getInt(10));
 			dto.setLkcal(rs.getInt(11));
 		}
+		ps.close();
+		con.close();
 		return dto;
 	}
 }

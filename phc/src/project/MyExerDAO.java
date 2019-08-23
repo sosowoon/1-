@@ -61,13 +61,15 @@ public class MyExerDAO {
 		String password = "1234";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		String sql = "insert into MyExer(id,date,amount,eid) values(?,?,?,?)";
+		String sql = "insert into MyExer(id,date,amount,eid) values(?,?,?,?,?)";
 	
 		PreparedStatement ps = con.prepareStatement(sql);
-		ps.setString(1, dto.getId()); //test1
+		ps.setString(1, dto.getId());
 		ps.setDate(2, dto.getDate());
 		ps.setInt(3, dto.getAmount());
-		ps.setInt(4, dto.getEid());//1
+		ps.setInt(4, dto.getEid());
+		ps.setBoolean(5, false);
+		
 		
 		ps.executeUpdate();
 		ps.close();
@@ -76,40 +78,39 @@ public class MyExerDAO {
 
 	
 
-	public boolean select(String id, String pwd) throws Exception {
+	public ArrayList<MyExerDTO> select(Date date, String id, boolean result) throws Exception {
 
-		// 1.드라이버 설정
 		Class.forName("com.mysql.jdbc.Driver");
-
-		// 2.DB연결
-		// url. user. password
 
 		String url = "jdbc:mysql://localhost:3306/phc?characterEncoding=utf8";
 		String user = "root";
-		String password = "root";
+		String password = "1234";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		// 3.SQL문 결정
 
-		String sql = "select * from MyExer where id  = ? and pwd = ?"; // two question in same time
+		String sql = "select * from MyExer where id  = ? and result = ? and date = ?";
 		PreparedStatement ps = con.prepareStatement(sql);
 
 		ps.setString(1, id);
-		ps.setString(2, pwd);
-
-		// '?' 쓰지 않는다. (?,?,?,?) 이렇게 쓴다.
-
-
-		// 4.SQL문 실행 요청
+		ps.setBoolean(2, result);
+		ps.setDate(3, date);
 
 		ResultSet rs = ps.executeQuery();
-		MemberDTO dto = new MemberDTO();
+		ArrayList<MyExerDTO> list = new ArrayList<MyExerDTO>();
 
-		if (rs.next()) {
-			return true;
-
+		while (rs.next()) {
+			MyExerDTO dto = new MyExerDTO();
+			dto.setMyeid(rs.getInt(1));
+			dto.setId(rs.getString(2));
+			dto.setDate(rs.getDate(3));
+			dto.setAmount(rs.getInt(4));
+			dto.setEid(rs.getInt(5));
+			dto.setResult(rs.getBoolean(6));
+			list.add(dto);
 		}
-		return false;// 묶어서 보냄
+		ps.close();
+		con.close();
+		return list;
 	}
 
 }

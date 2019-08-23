@@ -77,7 +77,7 @@ public class List {
 
 		t1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Workoutlist you = new Workoutlist(1);
+				new Workoutlist(1);
 				f.setVisible(false);
 			}
 		});
@@ -99,8 +99,7 @@ public class List {
 		JButton t2 = new JButton("2. Running");
 		t2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				Workoutlist you = new Workoutlist(2);
+				new Workoutlist(2);
 				f.setVisible(false);
 			}
 		});
@@ -118,7 +117,7 @@ public class List {
 		t3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				Workoutlist you = new Workoutlist(3);
+				new Workoutlist(3);
 				f.setVisible(false);
 			}
 		});
@@ -135,8 +134,7 @@ public class List {
 		JButton t4 = new JButton("4. Basketball");
 		t4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Workoutlist you = new Workoutlist(4);
-				
+				new Workoutlist(4);
 			}
 		});
 
@@ -153,8 +151,7 @@ public class List {
 		JButton t5 = new JButton("5. Swimming");
 		t5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Workoutlist you = new Workoutlist(5);
-			
+				new Workoutlist(5);
 				f.setVisible(false);
 			}
 		});
@@ -171,8 +168,7 @@ public class List {
 		JButton t6 = new JButton("1. Bench press");
 		t6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Workoutlist2 you = new Workoutlist2(6);
-				
+				new Workoutlist2(6);
 				f.setVisible(false);
 			}
 		});
@@ -190,8 +186,7 @@ public class List {
 		JButton t7 = new JButton("2. Squat");
 		t7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				Workoutlist2 you = new Workoutlist2(7);
+				new Workoutlist2(7);
 				f.setVisible(false);
 			}
 		});
@@ -209,8 +204,7 @@ public class List {
 		JButton t8 = new JButton("3. Deadlift");
 		t8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Workoutlist2 you = new Workoutlist2(8);
-			
+				new Workoutlist2(8);
 				f.setVisible(false);
 			}
 		});
@@ -228,8 +222,7 @@ public class List {
 		JButton t9 = new JButton("4. Push up");
 		t9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Workoutlist2 you = new Workoutlist2(9);
-			
+				new Workoutlist2(9);
 				f.setVisible(false);
 			}
 		});
@@ -246,13 +239,10 @@ public class List {
 		JButton t10 = new JButton("5. Sit up");
 		t10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				Workoutlist2 you = new Workoutlist2(10);
-			
+				new Workoutlist2(10);
 				f.setVisible(false);
 			}
 		});
-
 		ImageIcon icon20 = new ImageIcon("sit up.png");
 		Image image10 = icon20.getImage();
 		Image img10 = image10.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
@@ -264,6 +254,5 @@ public class List {
 		f.getContentPane().add(t10);
 
 		f.setVisible(true);
-
 	}
 }

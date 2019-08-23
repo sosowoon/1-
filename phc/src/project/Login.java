@@ -8,18 +8,14 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
 
 public class Login {
 	private JTextField ID1;
-//	static String id = "root"; //exmple
 	static String saveId;
 	JPasswordField ID2;
 	public Login() {
-//		id = "admin"; // exmaple
-
 		JFrame f1 = new JFrame();
 		f1.setSize(489, 800);
 		f1.getContentPane().setLayout(null);
@@ -33,8 +29,7 @@ public class Login {
 		s1.setSize(489, 800);
 		s1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				Signin2 page11 = new Signin2();
+				new Signin2();
 				f1.setVisible(false);
 			}
 		});
@@ -44,11 +39,11 @@ public class Login {
 
 		JButton s2 = new JButton("Log in ");
 		s2.addActionListener(new ActionListener() {
+			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
 				
 				String id = ID1.getText();
 				saveId = id;
-				System.out.println("////" + saveId);
 				String pwd = ID2.getText();
 				MemberDAO dao = new MemberDAO();
 				try {
@@ -61,12 +56,9 @@ public class Login {
 					} else {
 						JOptionPane.showMessageDialog(null, "다시 로그인해주세요");
 					}
-
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-
 			}
 		});
 		s2.setFont(new Font("굴림", Font.PLAIN, 35));
@@ -99,7 +91,5 @@ public class Login {
 		f1.getContentPane().add(ID2);
 		
 		f1.setVisible(true);
-
 	}
-
 }

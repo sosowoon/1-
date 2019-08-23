@@ -25,10 +25,12 @@ public class FoodChoice implements ActionListener{
 	JTextField[] innerT;
 	JButton[] innerB2;
 	ArrayList<DietDTO> list;
+	JLabel l2;
+	JFrame f;
 	public FoodChoice() throws Exception {
 		/////////////////////////////////////////////////// 공통시작!!
 		///////////////////////// 상단 메뉴/////////////////////////
-		JFrame f = new JFrame();
+		f = new JFrame();
 		
 		f.setTitle("Personal Health Care");
 		f.setSize(489, 800);
@@ -86,15 +88,18 @@ public class FoodChoice implements ActionListener{
 		f.getContentPane().add(b4);
 		/////////////////////////////////////////////////////////////
 		///////////////////// 실시간 칼로리 계산//////////////////////
-		JLabel l1 = new JLabel("남은 칼로리");
+		JLabel l1 = new JLabel("목표 칼로리    " + "   섭취 칼로리   " + "      소모칼로리    " + "       남은칼로리   ");
+		l1.setBackground(Color.WHITE);
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
 		l1.setBounds(0, 58, 472, 48);
 		f.getContentPane().add(l1);
 
-		JLabel l2 = new JLabel("DB에서 칼로리 가져와서 계산하기(실시간)");
+		l2 = new JLabel();
+		l2.setBackground(Color.WHITE);
 		l2.setHorizontalAlignment(SwingConstants.CENTER);
 		l2.setBounds(0, 108, 472, 48);
 		f.getContentPane().add(l2);
+		recountKcal();
 		//////////////////////////////////////////////////////////////
 		/////////////////////////////////////////////////////// 공통끝!!
 		
@@ -193,5 +198,37 @@ public class FoodChoice implements ActionListener{
 			}
 		}
 	}
-	
+	public void recountKcal() {
+		try {
+			MemberDAO memberdao = new MemberDAO();
+			MemberDTO memberdto = memberdao.selectKcal(Login.saveId);
+			int lKcal = memberdto.getLkcal();
+
+			int inKcal = 0;
+			MyDietDAO mydietdao = new MyDietDAO();
+			java.util.Date date = new java.util.Date();
+			java.sql.Date sqldate = new java.sql.Date(date.getTime());
+			ArrayList<MyDietDTO> mydietlist = mydietdao.selectTcal(sqldate, Login.saveId);
+			for (int i = 0; i < mydietlist.size(); i++) {
+				MyDietDTO dto1 = mydietlist.get(i);
+				DietDAO dao2 = new DietDAO();
+				DietDTO dto2 = dao2.select(dto1.getDid());
+				int cal = dto2.getDcal() * dto1.getAmount();
+				inKcal += cal;
+			}
+
+			int outKcal = 0;
+			MyExerDAO myexerdao =  new MyExerDAO();
+			ArrayList<MyExerDTO> list = myexerdao.select(sqldate, Login.saveId , true);
+			for (int i = 0; i < list.size(); i++) {
+				MyExerDTO dto1 = list.get(i);
+				outKcal += dto1.getAmount();
+			} 
+			l2.setText(lKcal + "kcal       =        " + inKcal + "kcal        -        " + outKcal
+					+ "kcal        +      " + (lKcal-(inKcal-outKcal)) + "kcal");
+			f.setVisible(true);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
+	}
 }

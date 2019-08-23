@@ -21,11 +21,13 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.Font;
 
 public class Food implements ActionListener{
 	JFrame f;
 	static int time;
 	JButton bM, bL, bD, bS;
+	JLabel l2;
 	public Food() throws Exception {
 		///////////////////////////////////////////////////공통시작!!
 		/////////////////////////상단 메뉴/////////////////////////
@@ -74,19 +76,19 @@ public class Food implements ActionListener{
 		});
 		b4.setBounds(354, 0, 118, 58);
 		f.getContentPane().add(b4);
-		/////////////////////////////////////////////////////////////
-		/////////////////////실시간 칼로리 계산//////////////////////
-		JLabel l1 = new JLabel("남은 칼로리");
+		
+		JLabel l1 = new JLabel("목표 칼로리    " + "   섭취 칼로리   " + "      소모칼로리    " + "       남은칼로리   ");
+		l1.setBackground(Color.WHITE);
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
 		l1.setBounds(0, 58, 472, 48);
 		f.getContentPane().add(l1);
-		
-		JLabel l2 = new JLabel("DB에서 칼로리 가져와서 계산하기(실시간)");
+
+		l2 = new JLabel();
+		l2.setBackground(Color.WHITE);
 		l2.setHorizontalAlignment(SwingConstants.CENTER);
 		l2.setBounds(0, 108, 472, 48);
 		f.getContentPane().add(l2);
-		//////////////////////////////////////////////////////////////
-		///////////////////////////////////////////////////////공통끝!!
+		recountKcal();
 		
 		JScrollPane scroll = new JScrollPane();
 		scroll.setBounds(0, 158, 472, 593);
@@ -126,6 +128,7 @@ public class Food implements ActionListener{
 		}
 		
 		bM = new JButton("+");
+		bM.setFont(new Font("굴림", Font.PLAIN, 30));
 		bM.setPreferredSize(new Dimension(472, 41));
 		columnpanel.add(bM);
 		
@@ -148,6 +151,7 @@ public class Food implements ActionListener{
 			columnpanel.add(label);			
 		}
 		bL = new JButton("+");
+		bL.setFont(new Font("굴림", Font.PLAIN, 30));
 		bL.setPreferredSize(new Dimension(472, 41));
 		columnpanel.add(bL);
 		
@@ -170,6 +174,7 @@ public class Food implements ActionListener{
 			columnpanel.add(label);			
 		}
 		bD = new JButton("+");
+		bD.setFont(new Font("굴림", Font.PLAIN, 30));
 		bD.setPreferredSize(new Dimension(472, 41));
 		columnpanel.add(bD);
 		
@@ -192,6 +197,7 @@ public class Food implements ActionListener{
 			columnpanel.add(label);			
 		}
 		bS = new JButton("+");
+		bS.setFont(new Font("굴림", Font.PLAIN, 30));
 		bS.setPreferredSize(new Dimension(472, 41));
 		columnpanel.add(bS);
 		
@@ -220,5 +226,38 @@ public class Food implements ActionListener{
 			e1.printStackTrace();
 		}
 		f.setVisible(false);
+	}
+	public void recountKcal() {
+		try {
+			MemberDAO memberdao = new MemberDAO();
+			MemberDTO memberdto = memberdao.selectKcal(Login.saveId);
+			int lKcal = memberdto.getLkcal();
+
+			int inKcal = 0;
+			MyDietDAO mydietdao = new MyDietDAO();
+			java.util.Date date = new java.util.Date();
+			java.sql.Date sqldate = new java.sql.Date(date.getTime());
+			ArrayList<MyDietDTO> mydietlist = mydietdao.selectTcal(sqldate, Login.saveId);
+			for (int i = 0; i < mydietlist.size(); i++) {
+				MyDietDTO dto1 = mydietlist.get(i);
+				DietDAO dao2 = new DietDAO();
+				DietDTO dto2 = dao2.select(dto1.getDid());
+				int cal = dto2.getDcal() * dto1.getAmount();
+				inKcal += cal;
+			}
+
+			int outKcal = 0;
+			MyExerDAO myexerdao =  new MyExerDAO();
+			ArrayList<MyExerDTO> list = myexerdao.select(sqldate, Login.saveId , true);
+			for (int i = 0; i < list.size(); i++) {
+				MyExerDTO dto1 = list.get(i);
+				outKcal += dto1.getAmount();
+			} 
+			l2.setText(lKcal + "kcal       =        " + inKcal + "kcal        -        " + outKcal
+					+ "kcal        +      " + (lKcal-(inKcal-outKcal)) + "kcal");
+			f.setVisible(true);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
 	}
 }

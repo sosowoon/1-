@@ -74,5 +74,34 @@ public class MyDietDAO {
 		con.close();
 		return list;
 	}
+	public ArrayList<MyDietDTO> selectTcal(Date date, String sid) throws Exception {
+		ArrayList<MyDietDTO> list = new ArrayList<MyDietDTO>();
+		Class.forName("com.mysql.jdbc.Driver");
+		String url = "jdbc:mysql://localhost:3306/phc";
+		String user = "root";
+		String password = "1234";
+
+		Connection con = DriverManager.getConnection(url, user, password);
+		String sql = "select * from mydiet where date = ? and id = ?";
+		PreparedStatement ps = con.prepareStatement(sql);
+		ps.setDate(1, date);
+		ps.setString(2, sid);
+
+		ResultSet rs = ps.executeQuery();
+		
+		while (rs.next()) {
+			MyDietDTO dto = new MyDietDTO();
+			dto.setDid(rs.getInt(1));
+			dto.setId(rs.getString(2));
+			dto.setDate(rs.getDate(3));
+			dto.setAmount(rs.getInt(4));
+			dto.setDid(rs.getInt(5));
+			dto.setTime(rs.getInt(6));
+			list.add(dto);
+		}
+		ps.close();
+		con.close();
+		return list;
+	}
 
 }
