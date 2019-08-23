@@ -92,13 +92,15 @@ public class MemberDAO {
 
 
 		ResultSet rs = ps.executeQuery();
-
+	
 		if (rs.next()) {
 			return true;
 		}
 		ps.close();
 		con.close();
 		return false;// 묶어서 보냄
+		
+	
 		
 	}
 	public boolean selectId(String id) throws Exception {
@@ -117,13 +119,20 @@ public class MemberDAO {
 		ps.setString(1, id);
 
 		ResultSet rs = ps.executeQuery();
-		ps.close();
-		con.close();
+		
 		if (rs.next()) {
+			ps.close();
+			con.close();
 			return true;
+			
 		}else {
+			ps.close();
+			con.close();
 			return false;
+			
 		}
+		
+		
 	}
 
 	public MemberDTO selectKcal(String id) throws Exception {

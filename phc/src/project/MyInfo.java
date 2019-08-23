@@ -110,8 +110,6 @@ public class MyInfo implements ActionListener {
 		f.getContentPane().add(panel);
 		dateChooser = new JDateChooser();
 		dateChooser.setFont(new Font("굴림", Font.BOLD, 15));
-//		JSpinner spin = new JSpinner();
-//		dateChooser.add(spin);
 		dateChooser.setBounds(0, 166, 246, 48);
 		JTextFieldDateEditor dateEditor = (JTextFieldDateEditor) dateChooser.getComponent(1);
 		dateEditor.setHorizontalAlignment(JTextField.CENTER);

@@ -61,7 +61,7 @@ public class MyExerDAO {
 		String password = "1234";
 
 		Connection con = DriverManager.getConnection(url, user, password);
-		String sql = "insert into MyExer(id,date,amount,eid) values(?,?,?,?,?)";
+		String sql = "insert into MyExer(id,date,amount,eid,result) values(?,?,?,?,?)";
 	
 		PreparedStatement ps = con.prepareStatement(sql);
 		ps.setString(1, dto.getId());

@@ -126,9 +126,7 @@ public class FoodChoice implements ActionListener{
 		
 		for (int i = 0; i < list.size(); i++) {
 			DietDTO dto = list.get(i);
-			
 			JPanel rowPanel = new JPanel();
-			
 			innerL[i] = new JLabel("○ "+dto.getDname() + ">>총칼:" + dto.getDcal() + " >>탄:" + dto.getCarb() + " >>단:" + dto.getProt() + " >>지:" + dto.getFat());
 			innerL[i].setPreferredSize(new Dimension(310, 45));
 			rowPanel.add(innerL[i]);
@@ -146,9 +144,7 @@ public class FoodChoice implements ActionListener{
 			innerB2[i].addActionListener(this);
 			innerB2[i].setMargin(new Insets(0, 0, 0, 0)); 
 			rowPanel.add(innerB2[i]);
-			
 			columnpanel.add(rowPanel);
-			
 		}
 		
 		JButton bC = new JButton("선택완료");
