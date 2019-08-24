@@ -135,6 +135,7 @@ public class List {
 		t4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				new Workoutlist(4);
+				f.setVisible(false);
 			}
 		});
 

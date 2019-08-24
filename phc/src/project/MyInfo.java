@@ -1,10 +1,12 @@
 package project;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -40,6 +42,8 @@ public class MyInfo implements ActionListener {
 	ArrayList<MyExerDTO> listMyexer;
 	JButton[] btn;
 	JLabel l2;
+	//현재 남은 칼로리
+	int remainKcal;
 	
 	public MyInfo() {
 		f = new JFrame();
@@ -145,6 +149,13 @@ public class MyInfo implements ActionListener {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+		java.util.Date date = new java.util.Date();
+		if(date.getHours() > 17 && remainKcal < 0) {
+			ImageIcon icon = new ImageIcon("alarm.png");
+			JOptionPane.showOptionDialog(f, "목표치에 도달하지 못했습니다!", "경고", JOptionPane.CLOSED_OPTION, JOptionPane.PLAIN_MESSAGE, icon, null, null);
+		}
+		
+		
 		f.setVisible(true);
 	}
 
@@ -334,9 +345,10 @@ public class MyInfo implements ActionListener {
 			for (int i = 0; i < list.size(); i++) {
 				MyExerDTO dto1 = list.get(i);
 				outKcal += dto1.getAmount();
-			} 
+			}
+			remainKcal = lKcal-(inKcal-outKcal);
 			l2.setText(lKcal + "kcal       =        " + inKcal + "kcal        -        " + outKcal
-					+ "kcal        +      " + (lKcal-(inKcal-outKcal)) + "kcal");
+					+ "kcal        +      " + remainKcal + "kcal");
 			f.setVisible(true);
 		} catch (Exception e2) {
 			e2.printStackTrace();

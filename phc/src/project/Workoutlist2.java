@@ -11,14 +11,16 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import java.awt.Insets;
 
 public class Workoutlist2 {
 	ExerciseDTO dto = null;
 
 	int eid;
-	private JTextField a2;
+	private JTextArea a2;
 	JFrame f;
 
 	public Workoutlist2(int eid) {
@@ -92,10 +94,10 @@ public class Workoutlist2 {
 			e1.printStackTrace();
 		}
 
-		JLabel a1 = new JLabel("");
+		JLabel a1 = new JLabel(dto.getEname());
 		a1.setFont(new Font("굴림", Font.PLAIN, 30));
 		a1.setHorizontalAlignment(SwingConstants.CENTER);
-		a1.setBounds(0, 65, 472, 53);
+		a1.setBounds(0, 65, 472, 42);
 		f.getContentPane().add(a1);
 
 		JTextField a4 = new JTextField();
@@ -108,12 +110,14 @@ public class Workoutlist2 {
 		JLabel walkingimage = new JLabel("");
 		walkingimage.setIcon(img);
 
-		walkingimage.setBounds(0, 117, 472, 170);
+		walkingimage.setBounds(0, 119, 472, 170);
 		f.getContentPane().add(walkingimage);
 
 		JTextField t1 = new JTextField();
 		t1.setHorizontalAlignment(SwingConstants.CENTER);
-		a2 = new JTextField(dto.getContents());
+		a2 = new JTextArea(dto.getContents().replace("  ", "\n"));
+		a2.setMargin(new Insets(7, 7, 7, 7));
+		a2.setLineWrap(true);
 		a2.setBounds(0, 299, 472, 119);
 		f.getContentPane().add(a2);
 		a2.setColumns(10);
@@ -188,7 +192,8 @@ public class Workoutlist2 {
 		lblSet.setBounds(10, 478, 170, 41);
 		f.getContentPane().add(lblSet);
 
-		JButton answer = new JButton("버튼");
+		JButton answer = new JButton("계산");
+		answer.setFont(new Font("굴림", Font.PLAIN, 30));
 		answer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 

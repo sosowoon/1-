@@ -10,15 +10,19 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 
 import javax.swing.JTextField;
+import java.awt.Rectangle;
+import java.awt.Insets;
 
 public class Workoutlist {
-	private JTextField t1;
+	private JTextArea t1;
 	private JTextField t2;
 	private JTextField t3;
 	private JTextField t4;
@@ -95,10 +99,10 @@ public class Workoutlist {
 			e1.printStackTrace();
 		}
 
-		JLabel kind = new JLabel(dto.getKind());
+		JLabel kind = new JLabel(dto.getEname());
 		kind.setFont(new Font("굴림", Font.PLAIN, 30));
 		kind.setHorizontalAlignment(SwingConstants.CENTER);
-		kind.setBounds(16, 77, 472, 41);
+		kind.setBounds(0, 57, 472, 41);
 		f.getContentPane().add(kind);
 
 		JButton summit = new JButton("선택완료");
@@ -116,15 +120,18 @@ public class Workoutlist {
 		ImageIcon img = new ImageIcon(dto.getImg());
 		JLabel image = new JLabel("");
 		image.setIcon(img);
-		image.setBounds(6, 88, 472, 173);
+		image.setBounds(0, 101, 472, 166);
 		f.getContentPane().add(image);
 
-		t1 = new JTextField(dto.getContents());
-
-		t1.setHorizontalAlignment(SwingConstants.CENTER);
-		t1.setBounds(6, 277, 472, 119);
+		t1 = new JTextArea(dto.getContents().replace("  ", "\n"));
+		t1.setMargin(new Insets(7, 7, 7, 7));
+		t1.setBounds(new Rectangle(10, 10, 10, 10));
+		t1.setLineWrap(true);
+		
+		t1.setBounds(0, 277, 472, 119);
 		f.getContentPane().add(t1);
 		t1.setColumns(10);
+		t1.setLineWrap(true);
 
 		JButton cancel = new JButton("취소");
 		cancel.addActionListener(new ActionListener() {
@@ -140,18 +147,18 @@ public class Workoutlist {
 
 		JLabel lblDistance = new JLabel("distance");
 		lblDistance.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		lblDistance.setBounds(44, 408, 151, 41);
+		lblDistance.setBounds(44, 398, 151, 41);
 		f.getContentPane().add(lblDistance);
 
 		JLabel lblTime = new JLabel("time");
 		lblTime.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
 		lblTime.setToolTipText("s");
-		lblTime.setBounds(44, 479, 151, 41);
+		lblTime.setBounds(44, 459, 151, 41);
 		f.getContentPane().add(lblTime);
 
 		JLabel lblSpeed = new JLabel("speed");
 		lblSpeed.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		lblSpeed.setBounds(44, 544, 151, 41);
+		lblSpeed.setBounds(44, 519, 151, 41);
 		f.getContentPane().add(lblSpeed);
 
 		JLabel lblKacl = new JLabel("kcal");
@@ -161,20 +168,20 @@ public class Workoutlist {
 
 		t2 = new JTextField();
 		t2.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
-		t2.setBounds(232, 409, 210, 50);
+		t2.setBounds(232, 399, 210, 41);
 		f.getContentPane().add(t2);
 		t2.setColumns(10);
 
 		t3 = new JTextField();
 		t3.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
 		t3.setColumns(10);
-		t3.setBounds(232, 474, 210, 50);
+		t3.setBounds(232, 459, 210, 41);
 		f.getContentPane().add(t3);
 
 		t4 = new JTextField();
 		t4.setFont(new Font("Lucida Grande", Font.PLAIN, 30));
 		t4.setColumns(10);
-		t4.setBounds(232, 539, 210, 50);
+		t4.setBounds(232, 519, 210, 41);
 		f.getContentPane().add(t4);
 
 		t5 = new JTextField();
@@ -183,7 +190,7 @@ public class Workoutlist {
 		t5.setBounds(137, 645, 305, 41);
 		f.getContentPane().add(t5);
 
-		JButton answer = new JButton("선택");
+		JButton answer = new JButton("계산");
 		answer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -214,7 +221,7 @@ public class Workoutlist {
 			}
 		});
 		answer.setFont(new Font("Dialog", Font.PLAIN, 30));
-		answer.setBounds(44, 597, 398, 41);
+		answer.setBounds(44, 579, 398, 41);
 		f.getContentPane().add(answer);
 
 		f.setVisible(true);

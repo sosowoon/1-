@@ -23,7 +23,7 @@ public class PHC {
 		JFrame F = new JFrame();
 
 		F.setSize(489, 800);
-		JButton me = new JButton("나를 눌러.");
+		JButton me = new JButton();
 		ImageIcon icon = new ImageIcon("Logo.png");
 		Image image2age = icon.getImage();
 		Image img = image2age.getScaledInstance(500, 500, Image.SCALE_SMOOTH);
@@ -32,13 +32,10 @@ public class PHC {
 
 		me.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				Login me = new Login();
+				new Login();
 				F.setVisible(false);
-
 			}
 		});
-
 		F.getContentPane().add(me);
 
 		txtMyPersonalHealth = new JTextField();

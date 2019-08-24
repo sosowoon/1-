@@ -34,7 +34,7 @@ public class Login {
 			}
 		});
 		s1.setFont(new Font("굴림", Font.PLAIN, 35));
-		s1.setBounds(29, 294, 182, 67);
+		s1.setBounds(0, 368, 237, 67);
 		f1.getContentPane().add(s1);
 
 		JButton s2 = new JButton("Log in ");
@@ -49,12 +49,12 @@ public class Login {
 				try {
 					boolean result = dao.select(id, pwd);
 					if (result == true) {
-						JOptionPane.showMessageDialog(null, "환영합니다.");
+						JOptionPane.showMessageDialog(f1, "환영합니다.");
 						new MyInfo();
 
 						f1.setVisible(false);
 					} else {
-						JOptionPane.showMessageDialog(null, "다시 로그인해주세요");
+						JOptionPane.showMessageDialog(f1, "다시 로그인해주세요");
 					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -63,32 +63,42 @@ public class Login {
 		});
 		s2.setFont(new Font("굴림", Font.PLAIN, 35));
 		s2.setSize(489, 800);
-		s2.setBounds(238, 294, 204, 67);
+		s2.setBounds(238, 368, 235, 67);
 		f1.getContentPane().add(s2);
 
 		JLabel IDtext = new JLabel("ID ");
 		IDtext.setHorizontalAlignment(SwingConstants.CENTER);
 		IDtext.setSize(489, 800);
-		IDtext.setFont(new Font("굴림", Font.PLAIN, 30));
-		IDtext.setBounds(0, 0, 473, 59);
+		IDtext.setFont(new Font("굴림", Font.PLAIN, 25));
+		IDtext.setBounds(0, 74, 473, 59);
 		f1.getContentPane().add(IDtext);
 
 		JLabel PWtext = new JLabel("PW");
 		PWtext.setHorizontalAlignment(SwingConstants.CENTER);
 		PWtext.setSize(489, 800);
-		PWtext.setFont(new Font("굴림", Font.PLAIN, 30));
-		PWtext.setBounds(0, 113, 473, 67);
+		PWtext.setFont(new Font("굴림", Font.PLAIN, 25));
+		PWtext.setBounds(0, 199, 473, 67);
 		f1.getContentPane().add(PWtext);
 
 		ID1 = new JTextField();
+		ID1.setFont(new Font("굴림", Font.PLAIN, 25));
+		ID1.setHorizontalAlignment(SwingConstants.CENTER);
 		ID1.setSize(489, 800);
-		ID1.setBounds(0, 61, 473, 54);
+		ID1.setBounds(0, 135, 473, 54);
 		f1.getContentPane().add(ID1);
 		ID1.setColumns(10);
 
 		ID2 = new JPasswordField();
-		ID2.setBounds(0, 192, 471, 59);
+		ID2.setFont(new Font("굴림", Font.PLAIN, 25));
+		ID2.setHorizontalAlignment(SwingConstants.CENTER);
+		ID2.setBounds(0, 266, 471, 59);
 		f1.getContentPane().add(ID2);
+		
+		JLabel lblNewLabel = new JLabel("WELCOME to PHC");
+		lblNewLabel.setFont(new Font("굴림", Font.PLAIN, 30));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(0, 0, 473, 59);
+		f1.getContentPane().add(lblNewLabel);
 		
 		f1.setVisible(true);
 	}
