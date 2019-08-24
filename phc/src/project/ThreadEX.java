@@ -1,27 +1,29 @@
 package project;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Random;
 
 public class ThreadEX implements Runnable {
-
-	int TestNum = 0;
-
 	@Override
 	public void run() {
 		ArrayList<MyExerDTO> list = new ArrayList<MyExerDTO>();
-		for (int i = 0; i < 10; i++) {
-			if (Thread.currentThread().getName().equals("A")) {
-				System.out.println("=======================");
-				TestNum++;
+		MyExerDAO dao = new MyExerDAO();
+		boolean isThere = true;
+		Random r = new Random();
+		try {
+			while(isThere) {
+				list = dao.select(new java.sql.Date(new Date().getTime()), Login.saveId, false);
+				if (list.size() <= 0) {
+					Thread.sleep(5000);
+				}else {
+					Thread.sleep(5000);
+					int num = r.nextInt(list.size());
+					dao.update(list.get(num).getMyeid(), true);
+				}
 			}
-			System.out.println("ThreadName =" + Thread.currentThread().getName() + "TestNum =" + TestNum);
-
-			try {
-				Thread.sleep(500);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
 		}
 	}
 }

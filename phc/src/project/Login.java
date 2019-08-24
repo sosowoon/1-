@@ -41,17 +41,22 @@ public class Login {
 		s2.addActionListener(new ActionListener() {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e) {
-				
 				String id = ID1.getText();
-				saveId = id;
 				String pwd = ID2.getText();
+				saveId = id;
 				MemberDAO dao = new MemberDAO();
 				try {
 					boolean result = dao.select(id, pwd);
 					if (result == true) {
 						JOptionPane.showMessageDialog(f1, "환영합니다.");
 						new MyInfo();
-
+						
+						
+						ThreadEX threadex = new ThreadEX();
+						Thread thread1 = new Thread(threadex, "A");
+						thread1.start();
+						Thread.currentThread().getName();
+						
 						f1.setVisible(false);
 					} else {
 						JOptionPane.showMessageDialog(f1, "다시 로그인해주세요");

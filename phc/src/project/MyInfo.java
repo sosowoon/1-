@@ -45,6 +45,7 @@ public class MyInfo implements ActionListener {
 	//현재 남은 칼로리
 	int remainKcal;
 	
+	@SuppressWarnings("deprecation")
 	public MyInfo() {
 		f = new JFrame();
 		f.setTitle("Personal Health Care");
@@ -77,6 +78,12 @@ public class MyInfo implements ActionListener {
 		f.getContentPane().add(b2);
 
 		JButton b3 = new JButton("내정보");
+		b3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new MyInfo();
+				f.setVisible(false);
+			}
+		});
 		b3.setBounds(236, 0, 118, 58);
 		f.getContentPane().add(b3);
 
@@ -144,18 +151,18 @@ public class MyInfo implements ActionListener {
 			}
 		});
 		f.getContentPane().add(bSearch);
+		
+		java.util.Date date = new java.util.Date();
+		if(date.getHours() > 12 && remainKcal < 0) {
+			ImageIcon icon = new ImageIcon("alarm.png");
+			JOptionPane.showOptionDialog(f, "목표치에 도달하지 못했습니다!", "경고"
+					, JOptionPane.CLOSED_OPTION, JOptionPane.PLAIN_MESSAGE, icon, null, null);
+		}
 		try {
 			setListAll(new java.sql.Date(dateChooser.getDate().getTime()));
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		java.util.Date date = new java.util.Date();
-		if(date.getHours() > 12 && remainKcal < 0) {
-			ImageIcon icon = new ImageIcon("alarm.png");
-			JOptionPane.showOptionDialog(f, "목표치에 도달하지 못했습니다!", "경고", JOptionPane.CLOSED_OPTION, JOptionPane.PLAIN_MESSAGE, icon, null, null);
-		}
-		
-		
 		f.setVisible(true);
 	}
 
