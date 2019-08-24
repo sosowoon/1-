@@ -110,7 +110,7 @@ public class Workoutlist {
 		summit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				MyInfo mainpage = new MyInfo();
+				new List();
 				f.setVisible(false);
 			}
 		});

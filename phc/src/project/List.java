@@ -48,6 +48,12 @@ public class List {
 		f.getContentPane().add(b2);
 
 		JButton b3 = new JButton("내정보");
+		b3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				new MyInfo();
+				f.setVisible(false);
+			}
+		});
 		b3.setBounds(236, 0, 118, 58);
 		f.getContentPane().add(b3);
 

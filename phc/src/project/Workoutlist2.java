@@ -172,7 +172,7 @@ public class Workoutlist2 {
 					dto.setDate(new java.sql.Date(date.getTime()));
 
 					dao2.insert(dto);
-					MyInfo main = new MyInfo();
+					new List();
 					f.setVisible(false);
 				} catch (Exception e1) {
 					e1.printStackTrace();

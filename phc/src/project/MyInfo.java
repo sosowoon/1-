@@ -96,7 +96,7 @@ public class MyInfo implements ActionListener {
 		b4.setBounds(354, 0, 118, 58);
 		f.getContentPane().add(b4);
 		
-		JLabel l1 = new JLabel("목표 칼로리    " + "   섭취 칼로리   " + "      소모칼로리    " + "       남은칼로리   ");
+		JLabel l1 = new JLabel("하루 권장 칼로리    " + "   섭취 칼로리   " + "      소모칼로리    " + "       남은칼로리   ");
 		l1.setBackground(Color.WHITE);
 		l1.setHorizontalAlignment(SwingConstants.CENTER);
 		l1.setBounds(0, 58, 472, 48);
@@ -150,7 +150,7 @@ public class MyInfo implements ActionListener {
 			e1.printStackTrace();
 		}
 		java.util.Date date = new java.util.Date();
-		if(date.getHours() > 17 && remainKcal < 0) {
+		if(date.getHours() > 12 && remainKcal < 0) {
 			ImageIcon icon = new ImageIcon("alarm.png");
 			JOptionPane.showOptionDialog(f, "목표치에 도달하지 못했습니다!", "경고", JOptionPane.CLOSED_OPTION, JOptionPane.PLAIN_MESSAGE, icon, null, null);
 		}
@@ -347,8 +347,8 @@ public class MyInfo implements ActionListener {
 				outKcal += dto1.getAmount();
 			}
 			remainKcal = lKcal-(inKcal-outKcal);
-			l2.setText(lKcal + "kcal       =        " + inKcal + "kcal        -        " + outKcal
-					+ "kcal        +      " + remainKcal + "kcal");
+			l2.setText(lKcal + "kcal               " + inKcal + "kcal                " + outKcal
+					+ "kcal              " + remainKcal + "kcal");
 			f.setVisible(true);
 		} catch (Exception e2) {
 			e2.printStackTrace();
