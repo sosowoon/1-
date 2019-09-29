@@ -153,7 +153,7 @@ public class MyInfo implements ActionListener {
 		f.getContentPane().add(bSearch);
 		
 		java.util.Date date = new java.util.Date();
-		if(date.getHours() > 17 && remainKcal < 0) {
+		if(date.getHours() > 20 && remainKcal < 0) {
 			ImageIcon icon = new ImageIcon("alarm.png");
 			JOptionPane.showOptionDialog(f, "목표치에 도달하지 못했습니다!", "경고"
 					, JOptionPane.CLOSED_OPTION, JOptionPane.PLAIN_MESSAGE, icon, null, null);

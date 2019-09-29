@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>SCD Top Selling</title>
+
+<!-- Custom fonts for this template-->
+<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet"
+	type="text/css">
+<link
+	href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+	rel="stylesheet">
+
+<!-- Custom styles for this template-->
+<link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+<script type="text/javascript"
+	src="//dapi.kakao.com/v2/maps/sdk.js?appkey=25c2169aac8a58a65838e6c0bc9639e8"></script>
+
+<script type="text/javascript" src="js/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	$(function() { 
+		$('#yearSelection').on('change', function() {
+			getDataPerOption();
+			CreateBarChart();
+		});
+		$('#quarterSelection').on('change', function() {
+			getDataPerOption();
+			CreateBarChart();
+		});
+		$('#sellCategorySelection').on('change', function() {
+			getDataPerOption();
+			CreateBarChart();
+		});
+		
+		getDataPerOption();
+		CreateBarChart();
+		
+		$.ajax({
+            url: "getSessionId.jsp",
+            success: (function(result) {
+                var trimResult = $.trim(result);
+                //alert("!!!" + trimResult);
+                $("#userid").text(trimResult);
+                if (trimResult == '로그인을 해주세요.') {
+                    //alert("로그인하세요.");
+                } else {
+                    //alert("로그인 되어 있습니다.");
+                    $("#logoutContainer").append("<a class='dropdown-item' href='login.html' data-toggle='modal' data-target='#logoutModal'> <i class='fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400'></i> Logout</a>");
+                    $("#memberDeleteContainer").append("<a class='nav-link' id='memberDelete'> <i class='fas fa-fw fa-cog'></i> <span>회원 탈퇴하기</span></a>");
+                    $("#memberDelete").click(function() {
+                        var answer = confirm("정말 탈퇴 하시겠습니까?");
+                        if (answer) {
+                            $.ajax({
+                                url: "del.jsp",
+                                data: {
+                                    m_id: trimResult
+                                },
+                                success: (function(result) {
+                                    location.href = "register.html";
+                                })
+                            });
+                        }
+                    });
+                }
+            })
+        });
+
+		// 기본적으로 데이터 가져오는 기능을 이 아래 넣어놓고 위에 각각의 값에 해당하는 값을 change로 받아주어 동적으로
+		// 생성 가능하도록 할 것.
+	});   
+	
+	function getDataPerOption() {
+		var year = $("#yearSelection option:selected").val();
+		var quarter = $("#quarterSelection option:selected").val();
+		var sellCategoryName = $("#sellCategorySelection option:selected").val();		
+		
+		var container = document.getElementById('map');
+		var options = {
+				center : new kakao.maps.LatLng(37.5665, 126.9780),
+				level : 9
+		};
+		
+		var map = new kakao.maps.Map(container, options);
+
+		var imageSrc = "http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+		var markerPositions = [];
+		var markerTitles = [];
+		
+		$.ajax({
+			url: "dataGetter.jsp",
+			data: {
+				year: year,
+				quarter: quarter,
+				sellCategoryName: sellCategoryName
+			},
+			dataType: "json",
+			success: function(result) {
+				$("#rankTable").empty();
+				$(result).each(function(i, commercialDistrict) {
+					markerPositions[i] = new kakao.maps.LatLng(
+							commercialDistrict.latitude,
+							commercialDistrict.longitude);
+					markerTitles[i] = commercialDistrict.commercialDistrictName;
+					
+					$("#rankTable").append("<tr><td>"+ commercialDistrict.commercialDistrictName + "</td>"
+							+ "<td>" + commercialDistrict.year + "</td>"
+							+ "<td>" + commercialDistrict.quarter + "</td>"
+							+ "<td>" + commercialDistrict.sellCategoryName + "</td>"
+							+ "<td>" + commercialDistrict.sellAmount + "</td> </tr>")
+				});
+				
+				for (var i = 0; i < markerPositions.length; i++) {
+					//alert(markerPositions[i]);
+					//alert(i);
+					var imageSize = new kakao.maps.Size(
+							24, 35);
+
+					var markerImage = new kakao.maps.MarkerImage(
+							imageSrc,
+							imageSize);
+					var marker = new kakao.maps.Marker(
+							{
+								map : map,
+								title : markerTitles[i],
+								position : markerPositions[i],
+								image : markerImage
+							});
+				}
+			}
+		});
+	}
+	
+</script>
+</head>
+
+<body id="page-top">
+
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+
+		<!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">SCD</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i> <span>Dashboard</span>
+                </a>
+            </li>
+
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Nav Item - Charts -->
+            <li class="nav-item active">
+                <a class="nav-link" href="login.html"> <i class="fas fa-fw fa-cog"></i> <span>로그인 하기</span></a>
+            </li>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item active">
+                <a class="nav-link" href="register.html"> <i class="fas fa-fw fa-cog"></i> <span>회원가입 하기</span></a>
+            </li>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item active">
+                <a class="nav-link" href="Business_change_indicators.html"> <i class="fas fa-fw fa-chart-area"></i> <span>자치구별 상권 변화 지표</span></a>
+            </li>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item active">
+                <a class="nav-link" href="top10CommercialDistrictsPerSellCategories.html"> <i class="fas fa-fw fa-chart-area"></i> <span>업종별 상위 매출 골목상권</span></a>
+            </li>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item active">
+                <a class="nav-link" href="opcl.html"> <i class="fas fa-fw fa-chart-area"></i> <span>업종별 골목상권 개폐업률</span></a>
+            </li>
+            <!-- Nav Item - Charts -->
+            <li class="nav-item active" id="memberDeleteContainer">
+            </li>
+
+
+        </ul>
+        <!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<nav
+					class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+					<!-- Sidebar Toggle (Topbar) -->
+					<button id="sidebarToggleTop"
+						class="btn btn-link d-md-none rounded-circle mr-3">
+						<i class="fa fa-bars"></i>
+					</button>
+
+
+					<div class="form-inline">
+						<div class="form-group mx-sm-3 mb-2">
+							<label for="exampleFormControlSelect1">연도</label>
+						</div>
+						<div class="form-group mx-sm-3 mb-2">
+							<select class="form-control" id="yearSelection">
+								<option>2019</option>
+								<option>2018</option>
+								<option>2017</option>
+								<option>2016</option>
+								<option>2015</option>
+								<option>2014</option>
+							</select>
+						</div>
+						<div class="form-group mx-sm-3 mb-2">
+							<label for="exampleFormControlSelect2">분기</label>
+						</div>
+						<div class="form-group mx-sm-3 mb-2">
+							<select class="form-control" id="quarterSelection">
+								<option>1</option>
+								<option>2</option>
+								<option>3</option>
+								<option>4</option>
+							</select>
+						</div>
+						<div class="form-group mx-sm-3 mb-2">
+							<label for="exampleFormControlSelect1">업종</label>
+						</div>
+						<div class="form-group mx-sm-3 mb-2">
+							<select class="form-control" id="sellCategorySelection">
+								<option>한식음식점</option>
+								<option>중식음식점</option>
+								<option>일식음식점</option>
+								<option>양식음식점</option>
+								<option>분식전문점</option>
+								<option>패스트푸드점</option>
+								<option>치킨전문점</option>
+								<option>제과점</option>
+								<option>커피·음료</option>
+								<option>호프·간이주점</option>
+								<option>일반교습학원</option>
+								<option>외국어학원</option>
+								<option>예체능학원</option>
+								<option>치과의원</option>
+								<option>한의원</option>
+								<option>일반의원</option>
+								<option>가전제품수리</option>
+								<option>부동산중개업</option>
+								<option>숙박업</option>
+								<option>노래방</option>
+								<option>PC방</option>
+								<option>당구장</option>
+								<option>세탁소(가정)</option>
+								<option>스포츠클럽</option>
+								<option>자동차수리·세차</option>
+								<option>두발미용업</option>
+								<option>네일숍</option>
+								<option>피부관리실</option>
+								<option>슈퍼마켓</option>
+								<option>편의점</option>
+								<option>컴퓨터·주변기기</option>
+								<option>핸드폰</option>
+								<option>식료품</option>
+								<option>건강보조식품</option>
+								<option>의류점</option>
+								<option>패션용품</option>
+								<option>의약·의료용품</option>
+								<option>서적·문구</option>
+								<option>화장품</option>
+								<option>오락·운동</option>
+								<option>섬유제품</option>
+								<option>화초·애완</option>
+								<option>가구·가전</option>
+								<option>주방·가정용품</option>
+								<option>통신판매업</option>
+							</select>
+						</div>
+					</div>
+
+					<!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small" id="userid">로그인을 해주세요</span>
+                                <img class="img-profile rounded-circle" src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown" id="logoutContainer">
+                                <a class="dropdown-item" href="#"> <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i> Profile
+                                </a>
+                                <a class="dropdown-item" href="#"> <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i> Settings
+                                </a>
+                                <a class="dropdown-item" href="#"> <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i> Activity Log
+                                </a>
+                                <div class="dropdown-divider"></div>
+
+                            </div>
+                        </li>
+
+                    </ul>
+
+
+				</nav>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+
+					<!-- Page Heading -->
+					<h4 class="h4 mb-2 text-gray-800" style="font-weight: bold"> &nbsp; 업종별 상위 매출 상권</h4>
+
+					<!-- Content Row -->
+					<div class="row">
+
+						<div class="col-xl-8 col-lg-7">
+
+							<!-- Area Chart -->
+							<!-- 							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">Area Chart</h6>
+								</div>
+								<div class="card-body">
+									<div class="chart-area">
+										<canvas id="myAreaChart"></canvas>
+									</div>
+									<hr>
+									Styling for the area chart can be found in the
+									<code>/js/demo/chart-area-demo.js</code>
+									file.
+								</div>
+							</div> -->
+
+							<!-- DataTales Example -->
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary"> 상위 매출 상권 정보(최대 상위 10곳)</h6>
+								</div>
+								<div class="card-body">
+									<div class="table-responsive">
+										<table class="table table-bordered" id="dataTable" width="30%"
+											cellspacing="0">
+											<thead>
+												<tr>
+													<th>상권</th>
+													<th>연도</th>
+													<th>분기</th>
+													<th>업종</th>
+													<th>판매량</th>
+												</tr>
+											</thead>
+											<tfoot>
+												<tr>
+													<th>상권</th>
+													<th>연도</th>
+													<th>분기</th>
+													<th>업종</th>
+													<th>판매량</th>
+												</tr>
+											</tfoot>
+											<tbody id="rankTable">
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+
+							<!-- Bar Chart -->
+							<div class="card shadow mb-4">
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">상위매출 상권 위치</h6>
+								</div>
+								<div class="card-body">
+									<div id="map" class="card-body" style="height: 500px;"></div>
+									<script>
+										
+										/* $(function() {
+											$
+													.ajax({
+														url : "geoDataJsonFile.geojson",
+														dataType : "json",
+														success : function(
+																result) {
+															//alert(result.features[0].geometry.coordinates[1]);
+															$
+																	.each(
+																			result.features,
+																			function(
+																					i,
+																					feature) {
+																				//alert(feature.geometry.coordinates[0]);
+																				markerPositions[i] = new kakao.maps.LatLng(
+																						feature.geometry.coordinates[1],
+																						feature.geometry.coordinates[0]);
+																				//alert(markerPositions[i]);
+																				//markerLongPositions[i] = feature.geometry.coordinates[1];
+																				//alert(markerPositions[i]);
+																				//alert(markerLongPositions[i]);
+																				//alert(markerPositions.length);
+																			});
+															//alert(markerPositions[0]);
+
+															// get상권들 위치 그리고 비교 후 선택
+
+															for (var i = 0; i < 1010; i++) {
+																//alert(markerPositions[i+500]);
+																//alert(i);
+																var imageSize = new kakao.maps.Size(
+																		24, 35);
+
+																var markerImage = new kakao.maps.MarkerImage(
+																		imageSrc,
+																		imageSize);
+																var marker = new kakao.maps.Marker(
+																		{
+																			map : map,
+																			title : "none",
+																			position : markerPositions[i],
+																			image : markerImage
+																		});
+															}
+														}
+													});
+										}); */
+									</script>
+								</div>
+							</div>
+
+						</div>
+
+						<!-- Donut Chart -->
+						<div class="col-xl-4 col-lg-5">
+							<div class="card shadow mb-4">
+								<!-- Card Header - Dropdown -->
+								<div class="card-header py-3">
+									<h6 class="m-0 font-weight-bold text-primary">상위매출 상권 매출액</h6>
+								</div>
+								<!-- Card Body -->
+								<div class="card-body">
+									<div id="barChartContainer" class="chart-bar">
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<footer class="sticky-footer bg-white">
+				<div class="container my-auto">
+					<div class="copyright text-center my-auto">
+						<span>Copyright &copy; Seoul Commercial Districts 2019</span>
+					</div>
+				</div>
+			</footer>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top"> <i
+		class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+					<button class="close" type="button" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">×</span>
+					</button>
+				</div>
+				<div class="modal-body">Select "Logout" below if you are ready
+					to end your current session.</div>
+				<div class="modal-footer">
+					<button class="btn btn-secondary" type="button"
+						data-dismiss="modal">Cancel</button>
+					<a class="btn btn-primary" href="login.html">Logout</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap core JavaScript-->
+	<script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Core plugin JavaScript-->
+	<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+	<!-- Custom scripts for all pages-->
+	<script src="js/sb-admin-2.min.js"></script>
+
+	<!-- Page level plugins -->
+	<script src="vendor/chart.js/Chart.min.js"></script>
+
+	<!-- Page level custom scripts -->
+	<script src="js/demo/chart-area-demo.js"></script>
+	<script src="js/demo/chart-pie-demo.js"></script>
+	<script src="js/barChart.js"></script>
+
+</body>
+
+</html>
